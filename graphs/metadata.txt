@@ -1,0 +1,2 @@
+
+runtime in sec for survey-graph with n = 1000 observations: 0.2642998695373535
