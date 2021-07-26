@@ -8,37 +8,42 @@ import pandas as pd
 # names = ["alarm","asia","child","hail","hepar","insurance","mildew","sachs","survey",]
 # targets = {"alarm": "CATECHOL","asia": "dysp","barley": "spndx","child": "XrayReport","hail": "R5Fcst",
 # "hepar": "Cirrhosis","insurance": "PropCost","mildew": "udbytte","sachs": "Akt","survey": "T","water" : "TBD"}
-graph_name = "survey"
-n = 1
-# example with survey graph (exact)
-path_true = f"Code/data/graphs/true/{graph_name}_true_graph.p"
+graph = "survey"
+
+method = "hc"
+
+# if mc necessary, do not forget mc and random state
+mc = "n/a"
+# random_state = 42
+
+# target node
+target_node = "T"
+
+# sample size during graph learning (s, m, l, xl)
+size = "s"
+
+# exact graph
+path_true = f"true_graphs_py/{graph}.p"
 # path to estimated graph
-path_est = f"Code/data/graphs/estimated/{graph_name}/{n}k.p"
+path_est = f"results_py/{method}/graphs/{graph}/{graph}_{size}.p"
+
 # load true graph
 g_true = pickle.load(open(path_true, "rb"))
 # load estimated graph
 g_est = pickle.load(open(path_est, "rb"))
-
-# if mc necessary, do not forget mc and random state
-mc = "n/a"
-# target node
-target_node = "T"
 # instance
-survey_comp = GraphComparison(g_true, g_est, target_node)
 
+survey_comp = GraphComparison(g_true, g_est, target_node)
 # true total and false total are ground truth
 TP, TN, FP, FN, true_total, false_total = survey_comp.exact()
 
-# What do I finally need? A dataframe with all the necessary info (Overall)
-# target (already at the beginning)
 # number of nodes
 d = len(g_true.nodes)
 # potential d-separations w.r.t. y
 potential_dseps = (d-1) * (2**(d-2))
-# true number of dseps (see above: true_total)
-# share of dseps (just make a node, if d-separations were approximated via mc)
+# share of dseps (just make a note, if d-separations were approximated via mc)
 dsep_share = true_total/(true_total+false_total)
-# and don't forget to mention the number of
+# and don't forget to mention the number of mc
 
 # graph specific table
 # then TP-, TN-, FP-, and FN-rate as above
@@ -54,7 +59,7 @@ F1 = (2 * precision * recall)/(precision + recall)
 
 try:
     evaluation_table = pd.read_csv(
-        "Code/data/graphs/evaluation_table.csv",
+        "results_py/graph_evaluation.csv",
         index=False,
     )
 except:
@@ -64,6 +69,7 @@ except:
         "d",
         "potential_dseps",
         "n (during learning)",
+        "csl method"
         "MC",
         "ground truth d-separations",
         "ground truth d-connections",
@@ -82,11 +88,11 @@ except:
     ]
     evaluation_table = pd.DataFrame(columns=col_names)
 
-content = [graph_name, target_node, d, potential_dseps, n, mc, true_total, false_total, dsep_share,
+content = [graph_name, target_node, d, potential_dseps, size, method, mc, true_total, false_total, dsep_share,
            TP, TN, FP, FN, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
 # fill evaluation table with current run
 evaluation_table.loc[len(evaluation_table)] = content
 
 evaluation_table.to_csv(
-    "Code/data/graphs/evaluation_table.csv", index=False
+    "results_py/graph_evaluation.csv", index=False
 )

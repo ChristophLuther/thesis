@@ -1,5 +1,5 @@
 # create a class for d_separation MC study
-
+# TODO git
 from functions import d_separation
 
 

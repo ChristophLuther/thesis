@@ -1,2 +1,0 @@
-graph,target,d,potential_dseps,n (during learning),MC,ground truth d-separations,ground truth d-connections,d-sep share,TP,TN,FP,FN,TP rate,TN rate,FP rate,FN rate,precision,recall,F1
-survey,T,6,80,1,n/a,24,56,0.3,24,44,12,0,1.0,0.7857142857142857,0.21428571428571427,0.0,0.6666666666666666,1.0,0.8
