@@ -29,7 +29,7 @@ for (i in names){
   write.csv(data_xl, filename_xl, row.names = FALSE)
 
   adj_mat <- amat(bn)
-  amat_file <- paste("true_amat/", i, ".csv", sep="")
-  write.csv(adj_mat, file="amat_file", row.names = FALSE)
+  amat_file <- paste("bnlearn/true_amat/", i, ".csv", sep="")
+  write.csv(adj_mat, file=amat_file, row.names = FALSE)
 
 }
