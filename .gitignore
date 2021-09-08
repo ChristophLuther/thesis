@@ -4,3 +4,4 @@ bnlearn/true_amat/
 bnlearn/graph_env
 fitted_models/
 results_py/
+.DS_store
