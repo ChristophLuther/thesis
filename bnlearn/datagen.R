@@ -30,8 +30,7 @@ for (i in names){
 
   adj_mat <- amat(bn)
   amat_file <- paste("true_amat/", i, ".csv", sep="")
-  write.csv(adj_mat, file="true_amat/water.csv", row.names = FALSE)
+  write.csv(adj_mat, file="amat_file", row.names = FALSE)
 
   # clear workspace 
-  rm(list = ls(all.names = TRUE))
 }
