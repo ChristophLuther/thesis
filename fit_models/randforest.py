@@ -1,40 +1,54 @@
-# Random Forest Classifier
+"""Fit naive Bayes classifiers for every discrete data set
+    n = 10,000 split in 90:10"""
+
+from sklearn.ensemble import RandomForestClassifier
 import pickle
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
 
+# TODO what sample size for model fitting (we do not care about performance, but we still require the properties): m
+names = ["asia", "alarm", "sachs", "hepar"]
 # read data
-df = pd.read_csv("data/csv/sachs.csv")
+for i in names:
+    df = pd.read_csv(f"data/{i}/{i}_s_num.csv")
+    if i == "asia":
+        col_names = df.columns.tolist()
+        col_names.remove("dysp")
+        X = df[col_names]
+        y = df["dysp"]
+    elif i == "alarm":
+        col_names = df.columns.tolist()
+        col_names.remove("CATECHOL")
+        X = df[col_names]
+        y = df["CATECHOL"]
+    elif i == "sachs":
+        col_names = df.columns.tolist()
+        col_names.remove("Akt")
+        X = df[col_names]
+        y = df["Akt"]
+    else:
+        col_names = df.columns.tolist()
+        col_names.remove("Cirrhosis")
+        X = df[col_names]
+        y = df["Cirrhosis"]
 
-# prepare data for model
-mapping_rf = {"LOW": 0, "AVG": 1, "HIGH": 2}
-col_names = df.columns.tolist()
-for i in col_names:
-    df[i] = df.replace({i: mapping_rf})[i]
-X = df[col_names[1:]]
-y = df["Akt"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.1, random_state=42
+    )
 
-# split data for train and test purpose
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.1, random_state=42
-)
+    rf = RandomForestClassifier(n_estimators=20, random_state=42)
+    rf.fit(X_train, y_train)
 
-# define model
-rf = RandomForestClassifier(n_estimators=2000, random_state=42)
-
-# fit model to data
-rf.fit(X_train, y_train)
-
-# make model prediction (single values)
-y_pred = rf.predict(X_test)
-
-# make model prediction (vectors of probabilities)
-probs = rf.predict_proba(X_test)
-
-# print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-
-# save model
-filename = "models/rf.sav"
-pickle.dump(rf, open(filename, "wb"))
+    if i == "asia":
+        filename = f"fitted_models/rf/asia_m_est20.sav"
+        pickle.dump(rf, open(filename, "wb"))
+    elif i == "sachs":
+        filename = f"fitted_models/rf/sachs_m_est20.sav"
+        pickle.dump(rf, open(filename, "wb"))
+    elif i == "alarm":
+        filename = f"fitted_models/rf/alarm_m_est20.sav"
+        pickle.dump(rf, open(filename, "wb"))
+    else:
+        filename = f"fitted_models/rf/hepar_m_est20.sav"
+        pickle.dump(rf, open(filename, "wb"))

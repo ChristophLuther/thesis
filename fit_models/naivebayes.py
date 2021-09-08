@@ -1,40 +1,52 @@
-# Naive Bayes Classifier
+"""Fit naive Bayes classifiers for every discrete data set
+    n = 10,000 split in 90:10"""
 from sklearn.naive_bayes import MultinomialNB
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-# TODO fit models separately for all data
-
+# TODO what sample size for model fitting (we do not care abouot performance, but we still require the properties): m
+names = ["asia", "alarm", "sachs", "hepar"]
 # read data
-data_file = "sachs_s"
-df = pd.read_csv(f"data/sachs/{data_file}.csv")
+for i in names:
+    df = pd.read_csv(f"data/{i}/{i}_s_num.csv")
+    if i == "asia":
+        col_names = df.columns.tolist()
+        col_names.remove("dysp")
+        X = df[col_names]
+        y = df["dysp"]
+    elif i == "alarm":
+        col_names = df.columns.tolist()
+        col_names.remove("CATECHOL")
+        X = df[col_names]
+        y = df["CATECHOL"]
+    elif i == "sachs":
+        col_names = df.columns.tolist()
+        col_names.remove("Akt")
+        X = df[col_names]
+        y = df["Akt"]
+    else:
+        col_names = df.columns.tolist()
+        col_names.remove("Cirrhosis")
+        X = df[col_names]
+        y = df["Cirrhosis"]
 
-# prepare data for model
-mapping_rf = {"LOW": 0, "AVG": 1, "HIGH": 2}
-col_names = df.columns.tolist()
-for i in col_names:
-    df[i] = df.replace({i: mapping_rf})[i]
-X = df[col_names[1:]]
-y = df["Akt"]
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.1, random_state=42
+    )
 
-# split data for train and test purpose
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.1, random_state=42
-)
-
-# define model and fit to data
-mnb = MultinomialNB()
-mnb.fit(X_train, y_train)
-
-# make model prediction (single values)
-y_pred = mnb.predict(X_test)
-
-# make model prediction (vectors of probabilities; NOT to be interpreted)
-probs = mnb.predict_proba(X_test)
-
-
-# save model
-filename = f"fitted_models/mnb/{data_file}.sav"
-pickle.dump(mnb, open(filename, "wb"))
+    mnb = MultinomialNB()
+    mnb.fit(X_train, y_train)
+    if i == "asia":
+        filename = f"fitted_models/mnb/asia_s.sav"
+        pickle.dump(mnb, open(filename, "wb"))
+    elif i == "sachs":
+        filename = f"fitted_models/mnb/sachs_s.sav"
+        pickle.dump(mnb, open(filename, "wb"))
+    elif i == "alarm":
+        filename = f"fitted_models/mnb/alarm_s.sav"
+        pickle.dump(mnb, open(filename, "wb"))
+    else:
+        filename = f"fitted_models/mnb/hepar_s.sav"
+        pickle.dump(mnb, open(filename, "wb"))
