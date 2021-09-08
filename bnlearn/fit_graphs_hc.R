@@ -20,8 +20,8 @@ for (i in graphs_discrete){
     df <- read.csv(filename)
 
     # as.factor() required for bnlearn.hc()
-    for (i in colnames(df)){
-      df[,i] <- as.factor(df[,i]) 
+    for (j in colnames(df)){
+      df[,j] <- as.factor(df[,j]) 
     }
 
     # structure learning and wall time
