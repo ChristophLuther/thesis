@@ -32,5 +32,4 @@ for (i in names){
   amat_file <- paste("true_amat/", i, ".csv", sep="")
   write.csv(adj_mat, file="amat_file", row.names = FALSE)
 
-  # clear workspace 
 }

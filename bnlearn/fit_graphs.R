@@ -2,13 +2,13 @@
 # for reproducibility of results
 
 # R template for Bayesian network structure learning using bnlearn packages
-setwd("/Users/christoph/Desktop/Code")
+setwd("/Users/christoph/Desktop/thesis_code")
+
 # install.packages("bnlearn")
 library("bnlearn")
 
 set.seed(1902)
 
-# TODO (mby) get cpu name
 
 # load data
 df <- read.csv("data/survey/survey_xl.csv")
