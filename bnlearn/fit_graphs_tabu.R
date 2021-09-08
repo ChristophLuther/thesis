@@ -20,8 +20,8 @@ for (i in graphs_discrete){
     df <- read.csv(filename)
     
     # as.factor() required for bnlearn.tabu()
-    for (i in colnames(df)){
-      df[,i] <- as.factor(df[,i]) 
+    for (j in colnames(df)){
+      df[,j] <- as.factor(df[,j]) 
     }
     
     # structure learning and wall time
@@ -46,6 +46,27 @@ for (i in graphs_cont){
     # load data
     filename <- paste("data/", i, "/", i, "_", size, ".csv", sep="")
     df <- read.csv(filename)
+    
+    if (i == "healthcare"){
+      # as.factor() required for bnlearn.tabu()
+      for (j in c("A", "C", "H")){
+        df[,j] <- as.factor(df[,j]) 
+      }
+    }
+    
+    if (i == "mehra"){
+      # as.factor() required for bnlearn.tabu()
+      for (j in c("Region", "Zone", "Type", "Season", "Year", "Month", "Day", "Hour")){
+        df[,j] <- as.factor(df[,j]) 
+      }
+    }
+    
+    if (i == "sangiovese"){
+      # as.factor() required for bnlearn.tabu()
+      for (j in c("Treatment")){
+        df[,j] <- as.factor(df[,j]) 
+      }
+    }
     
     # structure learning and wall time
     runtime <- system.time({ bn <- tabu(df) })
