@@ -1,26 +1,37 @@
 # data generation from bn object (cf. bnlearn package)
+# set wd to first level of project 
+setwd("~/Desktop/thesis_code")
 library('bnlearn')
-
+set.seed(1902)
 # sample data from graph, bn object from respective R environment available at
 # https://www.bnlearn.com/bnrepository/
 
-load('graph_env/water.rda')
+names <- c("alarm", "asia", "healthcare", "hepar", "mehra", "sangiovese", "sachs")
 
-# ran 7/25/21 w/ seed 1902 (for included graphs; refresh b/w runs for reproducibility)
-set.seed(1902)
+for (i in names){
+  
+  env_name <- paste("bnlearn/graph_env/", i, ".rda", sep="")
+  load(env_name)
 
-data_xl <- rbn(bn, n=1000000)
-data_l <- data_xl[sample(nrow(data_xl), 100000), ]
-data_m <- data_xl[sample(nrow(data_xl), 10000), ]
-data_s <- data_xl[sample(nrow(data_xl), 1000), ]
+  data_xl <- rbn(bn, n=1000000)
+  data_l <- rbn(bn, n=100000)
+  data_m <- rbn(bn, n=10000)
+  data_s <- rbn(bn, n=1000)
+  
+  filename_s <- paste("data/", i, "/", i, "_s.csv", sep="")
+  filename_m <- paste("data/", i, "/", i, "_m.csv", sep="")
+  filename_l <- paste("data/", i, "/", i, "_l.csv", sep="")
+  filename_xl <- paste("data/", i, "/", i, "_xl.csv", sep="")
+  
+  write.csv(data_s, filename_s, row.names = FALSE)
+  write.csv(data_m, filename_m, row.names = FALSE)
+  write.csv(data_l, filename_l, row.names = FALSE)
+  write.csv(data_xl, filename_xl, row.names = FALSE)
 
-write.csv(data_s,"data/water/water_s.csv", row.names = FALSE)
-write.csv(data_m,"data/water/water_m.csv", row.names = FALSE)
-write.csv(data_l,"data/water/water_l.csv", row.names = FALSE)
-write.csv(data_xl,"data/water/water_xl.csv", row.names = FALSE)
+  adj_mat <- amat(bn)
+  amat_file <- paste("true_amat/", i, ".csv", sep="")
+  write.csv(adj_mat, file="true_amat/water.csv", row.names = FALSE)
 
-adj_mat <- amat(bn)
-write.csv(adj_mat, file="true_amat/water.csv", row.names = FALSE)
-
-# clear workspace 
-rm(list = ls(all.names = TRUE))
+  # clear workspace 
+  rm(list = ls(all.names = TRUE))
+}
