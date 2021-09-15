@@ -29,14 +29,14 @@ for i in names:
         y = df["dysp"]
     elif i == "alarm":
         col_names = df.columns.tolist()
-        col_names.remove("CATECHOL")
+        col_names.remove("CVP")
         X = df[col_names]
-        y = df["CATECHOL"]
+        y = df["CVP"]
     elif i == "sachs":
         col_names = df.columns.tolist()
-        col_names.remove("Akt")
+        col_names.remove("Erk")
         X = df[col_names]
-        y = df["Akt"]
+        y = df["Erk"]
     else:
         col_names = df.columns.tolist()
         col_names.remove("Cirrhosis")
