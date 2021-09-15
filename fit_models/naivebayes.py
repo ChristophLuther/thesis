@@ -1,16 +1,27 @@
-"""Fit naive Bayes classifiers for every discrete data set
-    n = 10,000 split in 90:10"""
+"""Fit multinomial Bayes classifier to data, simple template used in CG SAGE project"""
 from sklearn.naive_bayes import MultinomialNB
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import sys
+import os
+import inspect
 
 
-# TODO what sample size for model fitting (we do not care abouot performance, but we still require the properties): m
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
+from functions import create_folder
+
+# create folder to store models
+create_folder(".fitted_models/")
+
 names = ["asia", "alarm", "sachs", "hepar"]
-# read data
+
 for i in names:
-    df = pd.read_csv(f"data/{i}/{i}_s_num.csv")
+    # read data
+    df = pd.read_csv(f"data/{i}/{i}_train.csv")
     if i == "asia":
         col_names = df.columns.tolist()
         col_names.remove("dysp")
@@ -32,21 +43,15 @@ for i in names:
         X = df[col_names]
         y = df["Cirrhosis"]
 
+    # standard train test split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.1, random_state=42
     )
 
+    # fit model
     mnb = MultinomialNB()
     mnb.fit(X_train, y_train)
-    if i == "asia":
-        filename = f"fitted_models/mnb/asia_s.sav"
-        pickle.dump(mnb, open(filename, "wb"))
-    elif i == "sachs":
-        filename = f"fitted_models/mnb/sachs_s.sav"
-        pickle.dump(mnb, open(filename, "wb"))
-    elif i == "alarm":
-        filename = f"fitted_models/mnb/alarm_s.sav"
-        pickle.dump(mnb, open(filename, "wb"))
-    else:
-        filename = f"fitted_models/mnb/hepar_s.sav"
-        pickle.dump(mnb, open(filename, "wb"))
+
+    # save model
+    filename = f"fitted_models/{i}_mnb.sav"
+    pickle.dump(mnb, open(filename, "wb"))

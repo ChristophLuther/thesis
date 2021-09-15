@@ -1,54 +1,45 @@
-"""Fit naive Bayes classifiers for every discrete data set
-    n = 10,000 split in 90:10"""
-
-from sklearn.ensemble import RandomForestClassifier
+"""Fit random forest for regression to data, simple template used in CG SAGE project"""
+from sklearn.ensemble import RandomForestRegressor
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import sys
+import os
+import inspect
 
 
-# TODO what sample size for model fitting (we do not care about performance, but we still require the properties): m
-names = ["asia", "alarm", "sachs", "hepar"]
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
+
+from functions import create_folder
+
+# create folder to store models
+create_folder(".fitted_models/")
+
+names = ["dag_s", "dag_m", "dag_l", "dag_xl"]
+
 # read data
 for i in names:
-    df = pd.read_csv(f"data/{i}/{i}_s_num.csv")
-    if i == "asia":
-        col_names = df.columns.tolist()
-        col_names.remove("dysp")
-        X = df[col_names]
-        y = df["dysp"]
-    elif i == "alarm":
-        col_names = df.columns.tolist()
-        col_names.remove("CATECHOL")
-        X = df[col_names]
-        y = df["CATECHOL"]
-    elif i == "sachs":
-        col_names = df.columns.tolist()
-        col_names.remove("Akt")
-        X = df[col_names]
-        y = df["Akt"]
-    else:
-        col_names = df.columns.tolist()
-        col_names.remove("Cirrhosis")
-        X = df[col_names]
-        y = df["Cirrhosis"]
 
+    df = pd.read_csv(f"data/{i}/{i}_train.csv")
+    col_names = df.columns.tolist()
+    # We use "x1" as target, since we randomly sampled edges, this is w.l.o.g. a target at a random
+    # position in the graph
+    col_names.remove("x1")
+    X = df[col_names]
+    y = df["x1"]
+
+    # standard train test split
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.1, random_state=42
     )
 
-    rf = RandomForestClassifier(n_estimators=20, random_state=42)
+    # fit model
+    rf = RandomForestRegressor()
     rf.fit(X_train, y_train)
 
-    if i == "asia":
-        filename = f"fitted_models/rf/asia_m_est20.sav"
-        pickle.dump(rf, open(filename, "wb"))
-    elif i == "sachs":
-        filename = f"fitted_models/rf/sachs_m_est20.sav"
-        pickle.dump(rf, open(filename, "wb"))
-    elif i == "alarm":
-        filename = f"fitted_models/rf/alarm_m_est20.sav"
-        pickle.dump(rf, open(filename, "wb"))
-    else:
-        filename = f"fitted_models/rf/hepar_m_est20.sav"
-        pickle.dump(rf, open(filename, "wb"))
+    # save model
+    filename = f"fitted_models/{i}_rf.sav"
+    pickle.dump(rf, open(filename, "wb"))
