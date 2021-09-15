@@ -27,20 +27,20 @@ for (i in graphs_discrete){
     # load data
     filename <- paste("data/", i, "/", i, "_", size, ".csv", sep="")
     df <- read.csv(filename)
-
-    # as.factor() required for bnlearn.hc()
+    
+    # as.factor() required for bnlearn.inter.iamb()
     for (j in colnames(df)){
       df[,j] <- as.factor(df[,j]) 
     }
-
+    
     # structure learning and wall time
-    runtime <- system.time({ bn <- hc(df) })
+    runtime <- system.time({ bn <- inter.iamb(df) })
     runtime <- runtime["elapsed"]
-    table[nrow(table) + 1,] = c(i, sample_size, "hc", runtime)
-
+    table[nrow(table) + 1,] = c(i, sample_size, "inter.iamb", runtime)
+    
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/hc/est_amat/", i, "_", size, ".csv", sep="")
+    amat_file <- paste("bnlearn/results/inter.iamb/est_amat/", i, "_", size, ".csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
@@ -55,38 +55,38 @@ for (i in graphs_cont){
     
     # if conditions only necessary for the respective graphs (unused)
     if (i == "healthcare"){
-      # as.factor() required for bnlearn.hc()
+      # as.factor() required for bnlearn.inter.iamb()
       for (j in c("A", "C", "H")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     if (i == "mehra"){
-      # as.factor() required for bnlearn.hc()
+      # as.factor() required for bnlearn.inter.iamb()
       for (j in c("Region", "Zone", "Type", "Season", "Year", "Month", "Day", "Hour")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     if (i == "sangiovese"){
-      # as.factor() required for bnlearn.hc()
+      # as.factor() required for bnlearn.inter.iamb()
       for (j in c("Treatment")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     # structure learning and wall time
-    runtime <- system.time({ bn <- hc(df) })
+    runtime <- system.time({ bn <- inter.iamb(df) })
     runtime <- runtime["elapsed"]
-    table[nrow(table) + 1,] = c(i, sample_size, "hc", runtime)
+    table[nrow(table) + 1,] = c(i, sample_size, "inter.iamb", runtime)
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/hc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
+    amat_file <- paste("bnlearn/results/inter.iamb/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
 
 # save table
-write.csv(table,"bnlearn/results/hc/runtime_data.csv", row.names = FALSE)
+write.csv(table,"bnlearn/results/inter.iamb/runtime_data.csv", row.names = FALSE)
 
