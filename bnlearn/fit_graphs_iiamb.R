@@ -1,6 +1,8 @@
 # Bayesian network structure learning using bnlearn package
 setwd("/Users/christoph/Desktop/thesis_code")
-
+dir.create("bnlearn/results")
+dir.create("bnlearn/results/iiamb")
+dir.create("bnlearn/results/iiamb/est_amat")
 #install.packages("bnlearn")
 library("bnlearn")
 
@@ -9,9 +11,9 @@ set.seed(1902)
 
 # to loop through different data sets
 graphs_discrete <- c("alarm", "asia", "hepar", "sachs")
-graphs_cont <- c("dag_s", "dag_m", "dag_l", "dag_xl")
+graphs_cont <- c("dag_s", "dag_m", "dag_l")
 sizes <- c("s", "m", "l", "xl")
-sample_sizes <- (1000, 10000, 100000, 1000000)
+sample_sizes <- c(1000, 10000, 100000, 1000000)
 
 # initiate data frame to store metadata like runtime
 table <- data.frame(matrix(ncol = 4, nrow = 0))
