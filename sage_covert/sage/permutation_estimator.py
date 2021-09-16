@@ -120,6 +120,7 @@ class PermutationEstimator:
         if self.dsep_test:
             g = nx.DiGraph(self.adj_mat)
             nodes = list(g.nodes)
+            assert self.target in nodes
             nodes.remove(self.target)
             assert self.col_names == nodes
         # Permutation sampling.
@@ -134,7 +135,9 @@ class PermutationEstimator:
             for i in range(batch_size):
                 np.random.shuffle(permutations[i])  # CL: as many permutations of the features as batches
             # CL: permutations[i] is now a shuffled array of numeric feature indices
-
+            print("perm", permutations)
+            print(permutations[0])
+            print(permutations[0][0])
             # Calculate sample counts.
             if relaxed:
                 scores[:] = 0
@@ -163,12 +166,12 @@ class PermutationEstimator:
                 # then I can also go through all batch_sizes
                 if self.dsep_test:
                     if i == 0:
-                        dsep = nx.d_separated(g, set(self.col_names[permutations[0][i]]), set(self.target), set())
+                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, set(self.target), set())
                     else:
                         cond_set = {self.col_names[permutations[0][min_coalition]]}
                         for j in range(min_coalition, i):
                             cond_set.add(self.col_names[permutations[0][j]])
-                        dsep = nx.d_separated(g, set(self.col_names[permutations[0][i]]), set(self.target), cond_set)
+                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, set(self.target), cond_set)
                     if dsep:
                         scores[arange, inds] = 0
                     else:
