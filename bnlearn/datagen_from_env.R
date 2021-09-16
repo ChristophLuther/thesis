@@ -1,9 +1,9 @@
 # data generation from bn object (cf. https://www.bnlearn.com/bnrepository/)
 
-setwd("~/thesis")
+setwd("~/thesis_code")
 dir.create("bnlearn/true_amat")
 # install package if necessary
-# install.packages('bnlearn')
+install.packages('bnlearn')
 
 # load package 'bnlearn'
 library('bnlearn')

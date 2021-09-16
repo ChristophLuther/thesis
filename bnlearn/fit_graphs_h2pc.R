@@ -1,5 +1,5 @@
 # Bayesian network structure learning using bnlearn package
-setwd("~/thesis")
+setwd("~/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/h2pc")
 dir.create("bnlearn/results/h2pc/est_amat")
