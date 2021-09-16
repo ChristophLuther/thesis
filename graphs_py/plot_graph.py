@@ -6,7 +6,6 @@ path = "results_py/true_amat/dag_s.p"
 amat = pickle.load(open(path, "rb"))
 
 g = nx.DiGraph(amat)
-
-nx.draw(g, with_labels=True, font_weight="bold")
+nx.draw(g)
 plt.show()
-# plt.savefig("results_py/tabu/graphs/pngs/asia/asia_l.png")
+
