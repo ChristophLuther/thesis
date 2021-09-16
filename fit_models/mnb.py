@@ -3,6 +3,7 @@ from sklearn.naive_bayes import MultinomialNB
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 import sys
 import os
 import inspect
@@ -18,6 +19,9 @@ from functions import create_folder
 create_folder(".fitted_models/")
 
 names = ["asia", "alarm", "sachs", "hepar"]
+
+col_names = ["data", "model", "target", "accuracy"]
+mnb_details = pd.DataFrame(columns=col_names)
 
 for i in names:
     # read data
@@ -52,6 +56,16 @@ for i in names:
     mnb = MultinomialNB()
     mnb.fit(X_train, y_train)
 
+    y_pred = mnb.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+
+    # fill df with info about model
+    mnb_details.loc[len(mnb_details)] = [i, "mnb", "tbd", acc]
+
     # save model
     filename = f"fitted_models/{i}_mnb.sav"
     pickle.dump(mnb, open(filename, "wb"))
+
+mnb_details.to_csv(
+    "fitted_models/mnb_details.csv", index=False
+)
