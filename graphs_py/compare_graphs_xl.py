@@ -9,7 +9,7 @@ names = ["alarm_xl", "asia_xl", "hepar_xl", "sachs_xl", "dag_s_1000000_obs", "da
          "dag_m_1000000_obs"]
 
 targets_mid = {"alarm_xl": "CVP", "asia_xl": "dysp", "hepar_xl": "Cirrhosis", "sachs_xl": "Erk",
-               "dag_s_1000000_obs": "V1", "dag_m_1000000_obs": "V1", "dag_l_1000000_obs": "V1"}
+               "dag_s_1000000_obs": "1", "dag_m_1000000_obs": "1", "dag_l_1000000_obs": "1"}
 
 methods = ["iiamb", "gs", "hc", "tabu", "mmhc", "h2pc"]
 

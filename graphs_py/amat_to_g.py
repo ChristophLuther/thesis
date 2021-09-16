@@ -47,7 +47,7 @@ if estimated:
             df = pd.read_csv(
                 f"bnlearn/results/{method}/est_amat/{i}.csv"
             )
-            mapping_rf = {"FALSE": 0, "TRUE": 1}
+            mapping_rf = {"False": 0, "True": 1}
             col_names = df.columns.tolist()
             for j in col_names:
                 df[j] = df.replace({j: mapping_rf})[j]
@@ -65,7 +65,15 @@ if estimated:
 else:
     for i in names_true:
         df = pd.read_csv(f"bnlearn/true_amat/{i}.csv")
-        mapping_rf = {"FALSE": 0, "TRUE": 1}
+
+        if i in ["dag_s", "dag_m", "dag_l"]:
+            col_dict = {}
+            for k in range(len(df.columns)):
+                k_key = f"V{k+1}"
+                col_dict[k_key] = str(k+1)
+            df = df.rename(columns=col_dict)
+
+        mapping_rf = {False: 0, True: 1}
         col_names = df.columns.tolist()
         for j in col_names:
             df[j] = df.replace({j: mapping_rf})[j]

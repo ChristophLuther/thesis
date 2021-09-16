@@ -8,7 +8,7 @@ import pandas as pd
 names = ["alarm_m", "asia_m", "hepar_m", "sachs_m", "dag_s_10000_obs", "dag_m_10000_obs", "dag_m_10000_obs"]
 
 targets_mid = {"alarm_m": "CVP", "asia_m": "dysp", "hepar_m": "Cirrhosis", "sachs_m": "Erk",
-               "dag_s_10000_obs": "V1", "dag_m_10000_obs": "V1", "dag_l_10000_obs": "V1"}
+               "dag_s_10000_obs": "1", "dag_m_10000_obs": "1", "dag_l_10000_obs": "1"}
 
 methods = ["iiamb", "gs", "hc", "tabu", "mmhc", "h2pc"]
 
