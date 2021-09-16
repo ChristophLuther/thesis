@@ -1,6 +1,6 @@
 # graph generation with pcalg package
 
-setwd("~/thesis_code")
+# setwd("~/thesis_code")
 dir.create("data/dag_s")
 dir.create("data/dag_m")
 dir.create("data/dag_l")
