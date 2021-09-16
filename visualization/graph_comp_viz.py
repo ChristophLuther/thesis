@@ -4,6 +4,19 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import sys
+import os
+import inspect
+
+
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
+
+from functions import create_folder
+
+create_folder(".dseps/")
 
 df = pd.read_csv("results_py/graph_evaluation.csv")
 

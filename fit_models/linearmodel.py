@@ -25,11 +25,11 @@ for i in names:
 
     df = pd.read_csv(f"data/{i}/{i}_train.csv")
     col_names = df.columns.tolist()
-    # We use "x1" as target, since we randomly sampled edges, this is w.l.o.g. a target at a random
+    # We use "V1" as target, since we randomly sampled edges, this is w.l.o.g. a target at a random
     # position in the graph
-    col_names.remove("x1")
+    col_names.remove("V1")
     X = df[col_names]
-    y = df["x1"]
+    y = df["V1"]
 
     # standard train test split
     X_train, X_test, y_train, y_test = train_test_split(

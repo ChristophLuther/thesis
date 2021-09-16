@@ -3,22 +3,23 @@ import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
 # import matplotlib.pyplot as plt
-import time
+from time import time
 
-# TODO simulation for 1 graph and 3 models
 # TODO track deltas and corresponding coalitions with mlflow
 # load data and adjacency matrix
-df = pd.read_csv("data/sachs/sachs_m_num.csv")
-adj_mat = pickle.load(open("results_py/true_amat_py/sachs.p", "rb"))
+df = pd.read_csv("data/healthcare/healthcare_s_num.csv")
+adj_mat = pickle.load(open("results_py/true_amat_py/healthcare.p", "rb"))
 
 # load models
-mnb = pickle.load(open("fitted_models/mnb/sachs_m.sav", "rb"))
-rf = pickle.load(open("fitted_models/rf/sachs_m_est20.sav", "rb"))
+# mnb = pickle.load(open("fitted_models/mnb/sachs_m.sav", "rb"))
+# rf = pickle.load(open("fitted_models/rf/sachs_m_est20.sav", "rb"))
+lm = pickle.load(open("fitted_models/lm/healthcare.sav", "rb"))
+
 
 col_names = df.columns.to_list()
-col_names.remove("Akt")
+col_names.remove("T")
 X = df[col_names]
-y = df["Akt"]
+y = df["T"]
 
 # split data for train and test purpose
 X_train, X_test, y_train, y_test = train_test_split(
@@ -31,21 +32,21 @@ y_train = y_train.to_numpy()
 y_test = y_test.to_numpy()
 
 
-models = [mnb, rf]
+models = [lm]
 
 for model in models:
     # SAGE according to covert
     imputer = sage.MarginalImputer(model, X_train)
-    estimator = sage.PermutationEstimator(imputer, "cross entropy")
-    cg_estimator = sage.PermutationEstimator(imputer, "cross entropy", dsep_test=True,
-                                             adj_mat=adj_mat, col_names=col_names, target='Akt')
+    estimator = sage.PermutationEstimator(imputer, "mse")
+    # cg_estimator = sage.PermutationEstimator(imputer, "mse", dsep_test=True,
+    #                                         adj_mat=adj_mat, col_names=col_names, target='T')
 
     # sage values
-    start_time = time.time()
+    start_time = time()
     sage_values = estimator(X_train, y_train)
-    time = time.time() - start_time
+    time_og = time() - start_time
 
     # cg values
-    start_time_cg = time.time()
-    cg_values = cg_estimator(X_train, y_train)
-    time_cg = time.time() - start_time_cg
+    # start_time_cg = time()
+    # cg_values = cg_estimator(X_train, y_train)
+    # time_cg = time() - start_time_cg

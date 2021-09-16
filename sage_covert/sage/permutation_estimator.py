@@ -191,6 +191,7 @@ class PermutationEstimator:
                     bar.update(batch_size)
 
             # Update tracker.
+            print(scores, len(scores))
             tracker.update(scores, sample_counts)
 
             # Calculate progress.
