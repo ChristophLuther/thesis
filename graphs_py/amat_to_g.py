@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
     description="convert adjacency matrix to format for nx")
 
 parser.add_argument(
-    "-a",
+    "-e",
     "--amat",
     type=bool,
     default=False,
@@ -46,10 +46,12 @@ names_true = ["asia", "alarm", "sachs", "hepar"]
 methods = ["hc", "tabu", "mmhc", "iiamb", "h2pc", "gs"]
 
 
-def convert_amat(args):
-    if args.amat:
+def convert_amat(arg):
+    if arg.amat:
+        print(arg.amat)
         # loop through method in methods
         for method in methods:
+            create_folder(f"results_py/{method}")
             # loop through graphs
             for i in names:
                 # load adjacency matrix as csv file
@@ -75,7 +77,7 @@ def convert_amat(args):
                 pickle.dump(df, open(f"results_py/{method}/est_amat/{i}.p", "wb"))
                 g = nx.DiGraph(df)
                 create_folder(f"results_py/{method}/graphs/")
-                filename = f"results_py/{method}/graphs/{i}/.p"
+                filename = f"results_py/{method}/graphs/{i}.p"
                 pickle.dump(g, open(filename, "wb"))
     else:
         for i in names_true:
