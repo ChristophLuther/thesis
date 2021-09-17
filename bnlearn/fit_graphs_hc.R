@@ -4,7 +4,7 @@ dir.create("bnlearn/results")
 dir.create("bnlearn/results/hc")
 dir.create("bnlearn/results/hc/est_amat")
 
-install.packages("bnlearn")
+#install.packages("bnlearn")
 library("bnlearn")
 
 # set seed

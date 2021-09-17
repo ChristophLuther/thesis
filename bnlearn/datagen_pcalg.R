@@ -4,13 +4,13 @@
 dir.create("data/dag_s")
 dir.create("data/dag_m")
 dir.create("data/dag_l")
-dir.create("data/dag_xl")
+#dir.create("data/dag_xl")
 
 # install packages if necessary 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install("graph")
-install.packages('pcalg')
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+#BiocManager::install("graph")
+#install.packages('pcalg')
 
 # load package 'pcalg'
 library('pcalg')
