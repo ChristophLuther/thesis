@@ -37,16 +37,16 @@ for (i in graphs_discrete){
     # structure learning and wall time
     runtime <- system.time({ bn <- inter.iamb(df) })
     runtime <- runtime["elapsed"]
-    table[nrow(table) + 1,] = c(i, sample_size, "inter.iamb", runtime)
+    table[nrow(table) + 1,] = c(i, sample_size, "inter iamb", runtime)
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/inter.iamb/est_amat/", i, "_", size, ".csv", sep="")
+    amat_file <- paste("bnlearn/results/iiamb/est_amat/", i, "_", size, ".csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
 
 
 # save table
-write.csv(table,"bnlearn/results/inter.iamb/runtime_data_discrete.csv", row.names = FALSE)
+write.csv(table,"bnlearn/results/iiamb/runtime_data_discrete.csv", row.names = FALSE)
 
