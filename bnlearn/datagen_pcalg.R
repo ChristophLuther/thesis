@@ -13,7 +13,7 @@ dir.create("data/dag_l")
 #install.packages('pcalg')
 
 # load package 'pcalg'
-library('pcalg')
+library(pcalg)
 
 # set seed
 set.seed(1902)
