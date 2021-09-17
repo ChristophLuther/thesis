@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-filenames = ["hepar_m", "hepar_m", "hepar_l", "hepar_xl", "hepar_train", "hepar_test"]
+filenames = ["hepar_s", "hepar_l", "hepar_xl", "hepar_train", "hepar_test"]
 
 for filename in filenames:
     df = pd.read_csv(f"data/hepar/{filename}.csv")
