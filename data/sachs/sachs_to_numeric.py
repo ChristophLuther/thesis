@@ -1,5 +1,5 @@
 import pandas as pd
-filenames = ["sachs_s", "sachs_l", "sachs_xl", "sachs_train", "sachs_test"]
+filenames = ["sachs_s", "sachs_m", "sachs_l", "sachs_xl", "sachs_train", "sachs_test"]
 
 for filename in filenames:
     df = pd.read_csv(f"data/sachs/{filename}.csv")
