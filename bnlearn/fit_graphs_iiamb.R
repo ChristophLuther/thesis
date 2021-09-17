@@ -1,5 +1,5 @@
-# Bayesian network structure learning using bnlearn package
- #setwd("~/thesis_code")
+# Bayesian network structure learning using inter-iamb algorithm (as implemented in bnlearn)
+#setwd("~/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/iiamb")
 dir.create("bnlearn/results/iiamb/est_amat")

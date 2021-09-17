@@ -1,6 +1,7 @@
-# data generation from bn object (cf. https://www.bnlearn.com/bnrepository/)
+# data generation from bn object as from .rda files (cf. https://www.bnlearn.com/bnrepository/)
 
 # setwd("~/thesis_code")
+# directories for graphs (asia, alarm, ...) should exist (as in github repo)
 dir.create("bnlearn/true_amat")
 # install package if necessary
 # install.packages('bnlearn')
@@ -22,8 +23,8 @@ for (i in names){
   data_l <- rbn(bn, n=100000)
   data_m <- rbn(bn, n=10000)
   data_s <- rbn(bn, n=1000)
-  data_train <- rbn(bn, n=1000000)
-  data_test <- rbn(bn, n=1000000)
+  data_train <- rbn(bn, n=100000)
+  data_test <- rbn(bn, n=100000)
   
   filename_s <- paste("data/", i, "/", i, "_s.csv", sep="")
   filename_m <- paste("data/", i, "/", i, "_m.csv", sep="")

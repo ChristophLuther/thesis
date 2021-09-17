@@ -1,4 +1,4 @@
-# Bayesian network structure learning using bnlearn package
+# Bayesian network structure learning using h2pc algorithm (as implemented in bnlearn)
 # setwd("~/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/h2pc")

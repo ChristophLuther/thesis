@@ -51,15 +51,13 @@ for (i in c(1:3)){
   }
   
   # create and store another data file for model training
-  data_train <- graph$simulate(1000000)
+  data_train <- graph$simulate(100000)
   filename_train <- paste("data/dag_", token, "/dag_", token, "_train.csv", sep="")
   write.csv(data_train, filename_train, row.names = FALSE)
   
-  data_test <- graph$simulate(1000000)
+  # create and store another data file for test purpose (SAGE experiment)
+  data_test <- graph$simulate(100000)
   filename_test <- paste("data/dag_", token, "/dag_", token, "_train.csv", sep="")
   write.csv(data_test, filename_test, row.names = FALSE)
   
 }
-
-# Run on Sep 15 approx 5:10 pm to 5:55 pm, Error: vector memory exhausted (limit reached?) for
-# dgg_xl_1000000_obs -> file missing
