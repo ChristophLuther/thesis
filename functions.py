@@ -2,7 +2,7 @@ from itertools import combinations
 import pandas as pd
 import networkx as nx
 import random
-import math
+import scipy.special as sp
 import numpy as np
 import os
 from scipy.stats import bernoulli
@@ -70,7 +70,7 @@ def d_separation(g, y, mc=None, random_state=None):
         # deconfounders there are n different sizes of conditioning sets because of the empty set
         probs = []
         for i in range(n):
-            probs.append((math.comb(n-1, i)) / (2**(n-1)))
+            probs.append((sp.comb(n-1, i)) / (2**(n-1)))
         k = 0
         while k < mc:
             # draw index for feature of interest
