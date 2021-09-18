@@ -33,9 +33,9 @@ for i in names:
         y = df["dysp"]
     elif i == "alarm":
         col_names = df.columns.tolist()
-        col_names.remove("CVP")
+        col_names.remove("CATECHOL")
         X = df[col_names]
-        y = df["CVP"]
+        y = df["CATECHOL"]
     elif i == "sachs":
         col_names = df.columns.tolist()
         col_names.remove("Erk")
