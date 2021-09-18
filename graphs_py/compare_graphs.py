@@ -48,8 +48,8 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-m",
-    "--mc",
+    "-mc",
+    "--montecarlo",
     type=int,
     default=100000,
     help="What mc?",
