@@ -44,7 +44,7 @@ names = ["asia_s", "asia_m", "asia_l", "asia_xl",
 names_true = ["asia", "alarm", "sachs", "hepar"]
 
 # specify methods used during structure learning
-methods = ["hc", "tabu", "mmhc", "iiamb", "h2pc", "gs"]
+methods = ["iiamb", "gs"]
 
 
 def convert_amat(arg):
