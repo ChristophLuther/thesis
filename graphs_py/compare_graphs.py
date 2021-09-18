@@ -94,9 +94,6 @@ def compare_graphs(arg):
     else:
         targets_mid = {arg.data: arg.target}
 
-    if arg.sample_size is None:
-        sample
-
     for alg in methods:
         for graph in names:
             # exact graph
