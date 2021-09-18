@@ -106,7 +106,7 @@ def compare_graphs(arg):
                 path_true = f"results_py/true_graphs/alarm.p"
             elif graph in ["sachs_s", "sachs_m", "sachs_l", "sachs_xl"]:
                 path_true = f"results_py/true_graphs/sachs.p"
-            
+
             # path to estimated graph
             path_est = f"results_py/{alg}/graphs/{graph}.p"
             # load true graph
@@ -119,11 +119,11 @@ def compare_graphs(arg):
             potential_dseps = (d - 1) * (2 ** (d - 2))
             target_node = targets_mid[graph]
             # comparison instance
-            if potential_dseps < arg.mc:
+            if potential_dseps < arg.montecarlo:
                 survey_comp = GraphComparison(g_true, g_est, target_node)
                 mc = "n/a"
             else:
-                mc = arg.mc
+                mc = arg.montecarlo
                 survey_comp = GraphComparison(g_true, g_est, target_node, mc=mc, rand_state=42)
             # true total and false total are ground truth
             TP, TN, FP, FN, true_total, false_total = survey_comp.exact()
