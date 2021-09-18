@@ -17,9 +17,9 @@ sys.path.insert(0, parent_dir)
 from functions import create_folder
 
 # create folder to store models
-create_folder(".fitted_models/")
+create_folder("fitted_models/")
 
-names = ["dag_s", "dag_m", "dag_l", "dag_xl"]
+names = ["dag_s", "dag_m"]
 
 col_names = ["data", "model", "target", "mse", "R2"]
 rfreg_details = pd.DataFrame(columns=col_names)
@@ -41,7 +41,7 @@ for i in names:
     )
 
     # fit model
-    rf = RandomForestRegressor()
+    rf = RandomForestRegressor(n_estimators=10)
     rf.fit(X_train, y_train)
 
     y_pred = rf.predict(X_test)
@@ -49,7 +49,7 @@ for i in names:
     r2 = r2_score(y_test, y_pred)
 
     # fill df with info about model
-    rfreg_details.loc[len(rfreg_details)] = [i, "rf reg", "V1", mse, r2]
+    rfreg_details.loc[len(rfreg_details)] = [i, "rf reg", "1", mse, r2]
 
     # save model
     filename = f"fitted_models/{i}_rf.sav"

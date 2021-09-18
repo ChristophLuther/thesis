@@ -17,7 +17,7 @@ sys.path.insert(0, parent_dir)
 from functions import create_folder
 
 # create folder to store models
-create_folder(".fitted_models/")
+create_folder("fitted_models/")
 
 names = ["dag_s", "dag_m", "dag_l"]
 
