@@ -5,6 +5,7 @@ import random
 import math
 import numpy as np
 import os
+from scipy.stats import bernoulli
 
 
 def powerset(items):
@@ -46,10 +47,14 @@ def d_separation(g, y, mc=None, random_state=None):
     # remove the target from list of predictors
     predictors.remove(y)
     n = len(predictors)
+
+    # TODO remove everything that is 'too large'
     # number of possible d-separations between one feature and target, i.e. number of potential conditioning sets
-    no_d_seps = (2 ** (n-1))
+    if mc is None:
+        no_d_seps = (2 ** (n-1))
     # initiate dataframe for all d-separations
     d_separations = pd.DataFrame(index=predictors, columns=range(no_d_seps))
+    # initiate list for d_separations
 
     if mc is not None:
         if random_state is not None:
@@ -185,3 +190,28 @@ def create_folder(directory):
             os.makedirs(directory)
     except OSError:
         print("Error: Creating directory: " + directory)
+
+
+def create_amat(n, p):
+    """Create a custom adjacency matrix of size n x n
+
+    Args:
+        n: number of nodes
+        p: probability of existence of an edge for each pair of nodes
+
+    Returns:
+        Adjacency matrix as pd.DataFrame
+
+    """
+    # create col_names
+    variables = []
+    for i in range(n):
+        variables.append(str(i+1))
+
+    # create df for amat
+    amat = pd.DataFrame(columns=variables, index=variables)
+
+    # TODO avoid double loop (use zip)
+    for j in range(n):
+        for k in range(n):
+            amat.iloc[j, k] = bernoulli(p)
