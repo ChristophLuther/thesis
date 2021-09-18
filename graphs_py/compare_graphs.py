@@ -122,11 +122,12 @@ def compare_graphs(arg):
             if arg.montecarlo is None:
                 survey_comp = GraphComparison(g_true, g_est, target_node)
                 mc = "n/a"
+                TP, TN, FP, FN, true_total, false_total = survey_comp.exact()
             else:
                 mc = arg.montecarlo
                 survey_comp = GraphComparison(g_true, g_est, target_node, mc=mc, rand_state=42)
-            # true total and false total are ground truth
-            TP, TN, FP, FN, true_total, false_total = survey_comp.exact()
+                TP, TN, FP, FN, true_total, false_total = survey_comp.approx()
+
             # share of dseps (just make a note, if d-separations were approximated via mc)
             dsep_share = true_total / (true_total + false_total)
             # and don't forget to mention the number of mc
