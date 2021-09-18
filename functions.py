@@ -52,8 +52,9 @@ def d_separation(g, y, mc=None, random_state=None):
     # number of possible d-separations between one feature and target, i.e. number of potential conditioning sets
     if mc is None:
         no_d_seps = (2 ** (n-1))
+        d_separations = pd.DataFrame(index=predictors, columns=range(no_d_seps))
+
     # initiate dataframe for all d-separations
-    d_separations = pd.DataFrame(index=predictors, columns=range(no_d_seps))
     # initiate list for d_separations
 
     if mc is not None:
