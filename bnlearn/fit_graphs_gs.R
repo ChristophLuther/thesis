@@ -39,8 +39,10 @@ for (i in graphs_discrete){
     runtime <- runtime["elapsed"]
     table[nrow(table) + 1,] = c(i, sample_size, "gs", runtime)
     
+    # make bn a DAG not CPDAG
+    dag <- cextend(bn)
     # adjacency matrix
-    adj_mat <- amat(bn)
+    adj_mat <- amat(dag)
     amat_file <- paste("bnlearn/results/gs/est_amat/", i, "_", size, ".csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
