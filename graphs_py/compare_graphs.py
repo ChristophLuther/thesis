@@ -140,8 +140,12 @@ def compare_graphs(arg):
                 TP_rate = TP / true_total
                 FN_rate = FN / true_total
 
-            TN_rate = TN / false_total
-            FP_rate = FP / false_total
+            if false_total == 0:
+                TN_rate = 0
+                FP_rate = 0
+            else:
+                TN_rate = TN / false_total
+                FP_rate = FP / false_total
             # F1 score
             precision = TP / (TP + FP)
             recall = TP_rate
