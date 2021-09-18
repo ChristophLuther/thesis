@@ -51,7 +51,7 @@ parser.add_argument(
     "-mc",
     "--montecarlo",
     type=int,
-    default=100000,
+    default=None,
     help="What mc?",
 )
 
@@ -65,7 +65,7 @@ def compare_graphs(arg):
     try:
         graph_evaluation = pd.read_csv("results_py/graph_evaluation.csv")
     except:
-        col_names = ["graph", "target_node", "d", "potential_dseps", "method", "mc",
+        col_names = ["graph", "target_node", "d", "method", "mc",
                      "true_total", "false_total", "dsep_share", "TP", "TN", "FP", "FN", "TP_rate",
                      "TN_rate", "FP_rate", "FN_rate", "precision", "recall", "F1"]
         graph_evaluation = pd.DataFrame(columns=col_names)
@@ -116,10 +116,10 @@ def compare_graphs(arg):
             # number of nodes
             d = len(g_true.nodes)
             # potential d-separations w.r.t. y
-            potential_dseps = (d - 1) * (2 ** (d - 2))
+            # potential_dseps = (d - 1) * (2 ** (d - 2))
             target_node = targets_mid[graph]
             # comparison instance
-            if potential_dseps < arg.montecarlo:
+            if arg.montecarlo is None:
                 survey_comp = GraphComparison(g_true, g_est, target_node)
                 mc = "n/a"
             else:
@@ -140,7 +140,7 @@ def compare_graphs(arg):
             precision = TP / (TP + FP)
             recall = TP_rate
             F1 = (2 * precision * recall) / (precision + recall)
-            content = [graph, target_node, d, potential_dseps, alg, mc, true_total, false_total,
+            content = [graph, target_node, d, alg, mc, true_total, false_total,
                        dsep_share,
                        TP, TN, FP, FN, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
             # fill evaluation table with current run
