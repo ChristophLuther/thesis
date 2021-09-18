@@ -10,6 +10,14 @@ import os
 import inspect
 import argparse
 
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
+
+from functions import create_folder
+
+
 # TODO make names, names_true and methods arguments for parser
 parser = argparse.ArgumentParser(
     description="convert adjacency matrix to format for nx")
@@ -23,13 +31,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
-
-
-from functions import create_folder
 
 # create folder to store models
 create_folder("results_py/")

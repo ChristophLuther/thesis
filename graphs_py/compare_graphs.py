@@ -3,6 +3,14 @@ import pickle
 from comparison import GraphComparison
 import pandas as pd
 import argparse
+import sys
+import os
+import inspect
+
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 
 parser = argparse.ArgumentParser(
     description="convert adjacency matrix to format for nx")
