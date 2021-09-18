@@ -97,7 +97,16 @@ def compare_graphs(arg):
     for alg in methods:
         for graph in names:
             # exact graph
-            path_true = f"results_py/true_graphs/{graph}.p"
+            # TODO add argument for true amat
+            if graph in ["hepar_s", "hepar_m", "hepar_l", "hepar_xl"]:
+                path_true = f"results_py/true_graphs/hepar.p"
+            elif graph in ["asia_s", "asia_m", "asia_l", "asia_xl"]:
+                path_true = f"results_py/true_graphs/asia.p"
+            elif graph in ["alarm_s", "alarm_m", "alarm_l", "alarm_xl"]:
+                path_true = f"results_py/true_graphs/alarm.p"
+            elif graph in ["sachs_s", "sachs_m", "sachs_l", "sachs_xl"]:
+                path_true = f"results_py/true_graphs/sachs.p"
+            
             # path to estimated graph
             path_est = f"results_py/{alg}/graphs/{graph}.p"
             # load true graph
