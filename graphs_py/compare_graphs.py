@@ -133,8 +133,13 @@ def compare_graphs(arg):
             # and don't forget to mention the number of mc
             # graph specific table
             # then TP-, TN-, FP-, and FN-rate as above
-            TP_rate = TP / true_total
-            FN_rate = FN / true_total
+            if true_total == 0:
+                TP_rate = 0
+                FN_rate = 0
+            else:
+                TP_rate = TP / true_total
+                FN_rate = FN / true_total
+
             TN_rate = TN / false_total
             FP_rate = FP / false_total
             # F1 score
