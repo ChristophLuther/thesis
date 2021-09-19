@@ -127,12 +127,12 @@ fn = 0
 
 for i in range(len(d_seps_true)):
     if d_seps_true[i] == d_seps_est[i]:
-        if d_seps_true is True:
+        if d_seps_true[i] is True:
             tp += 1
         else:
             tn += 1
     else:
-        if d_seps_true is True:
+        if d_seps_true[i] is True:
             fn += 1
         else:
             fp += 1
