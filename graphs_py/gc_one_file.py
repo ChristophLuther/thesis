@@ -5,6 +5,37 @@ import random
 import numpy as np
 import scipy.special as sp
 import networkx as nx
+import argparse
+
+
+parser = argparse.ArgumentParser(
+    description="Compare two graphs")
+
+parser.add_argument(
+    "-t",
+    "--target",
+    type=str,
+    default="y",
+    help="target?",
+)
+
+parser.add_argument(
+    "-tp",
+    "--truepath",
+    type=str,
+    default="hepar",
+    help="graph?",
+)
+
+parser.add_argument(
+    "-ep",
+    "--estpath",
+    type=str,
+    default="hepar_l",
+    help="graph est?",
+)
+
+args = parser.parse_args()
 
 # file for comparison
 try:
@@ -16,17 +47,17 @@ except:
     graph_evaluation = pd.DataFrame(columns=col_names)
 
 # TODO make inputs: method, graph, target
-target = "Cirrhosis"
+target = args.target
 
 # get a vector of d-separation statement for true graph
-path_true = f"results_py/true_graphs/hepar.p"
+path_true = f"results_py/true_graphs/{args.truepath}].p"
 g_true = pickle.load(open(path_true, "rb"))
 # number of nodes
 d = len(g_true.nodes)
 # number of predictors
 n = d-1
 # get a vector of d-separation statement for estimated graph
-path_est = f"results_py/hc/graphs/hepar_s.p"
+path_est = f"results_py/hc/graphs/{args.estpath}.p"
 g_est = pickle.load(open(path_est, "rb"))
 
 predictors = list(g_true.nodes)
