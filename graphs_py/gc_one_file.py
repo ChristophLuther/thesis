@@ -21,7 +21,9 @@ target = "Cirrhosis"
 # get a vector of d-separation statement for true graph
 path_true = f"results_py/true_graphs/hepar.p"
 g_true = pickle.load(open(path_true, "rb"))
+# number of nodes
 d = len(g_true.nodes)
+# number of predictors
 n = d-1
 # get a vector of d-separation statement for estimated graph
 path_est = f"results_py/hc/graphs/hepar_s.p"
@@ -72,7 +74,7 @@ while k < mc:
 
     else:
         # draw as many as 'card' numbers from range(n-1) as indices for conditioning set
-        indices = rng.choice(n - 1, size=card, replace=False)
+        indices = rng.choice(n - 2, size=card, replace=False)
         cond_set = set()
         for ii in range(len(indices)):
             # index for first
