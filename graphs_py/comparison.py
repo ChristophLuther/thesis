@@ -57,7 +57,7 @@ class GraphComparison:
         fn = 0
 
         for i in range(len(true_dseps)):
-            if true_dseps == est_dseps:
+            if true_dseps[i] == est_dseps[i]:
                 if true_dseps is True:
                     tp += 1
                 else:

@@ -95,7 +95,7 @@ fp = 0
 fn = 0
 
 for i in range(len(d_seps_true)):
-    if d_seps_true == d_seps_est:
+    if d_seps_true[i] == d_seps_est[i]:
         if d_seps_true is True:
             tp += 1
         else:
