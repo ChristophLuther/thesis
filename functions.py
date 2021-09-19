@@ -37,7 +37,7 @@ def d_separation(g, y, mc=None, random_state=None):
 
     Returns:
          pandas dataframe of boolean values for d-separation for every node except y (if mc is None)
-         boolean array of d-separation, not comprehensible w.r.t. which d-separations were tested explicitly
+         boolean array of d-separation, it cannot be traced back which d-separations were tested explicitly
          (if mc is not None)
     """
     # list of nodes (strings)
@@ -52,10 +52,8 @@ def d_separation(g, y, mc=None, random_state=None):
     # number of possible d-separations between one feature and target, i.e. number of potential conditioning sets
     if mc is None:
         no_d_seps = (2 ** (n-1))
+        # initiate dataframe for all d-separations
         d_separations = pd.DataFrame(index=predictors, columns=range(no_d_seps))
-
-    # initiate dataframe for all d-separations
-    # initiate list for d_separations
 
     if mc is not None:
         if random_state is not None:
@@ -98,7 +96,7 @@ def d_separation(g, y, mc=None, random_state=None):
                     cond_set.add(deconfounders[index])
                 d_seps_bool.append(nx.d_separated(g, {node}, {y}, cond_set))
             k += 1
-        return d_seps_bool
+        return d_seps_bool  # vector of booleans
     else:
         for i in range(n):
             # test d-separation w.r.t. target using all conditional sets possible
@@ -125,7 +123,7 @@ def d_separation(g, y, mc=None, random_state=None):
                                 g, {node}, {y}, cond_set
                             )
                             j += 1
-        return d_separations
+        return d_separations    # df with d-separation bools for every predictor
 
 
 # compute the number of d-separation statements from n
