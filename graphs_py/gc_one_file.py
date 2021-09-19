@@ -55,6 +55,11 @@ for i in range(n):
     probs.append((sp.comb(n - 1, i)) / (2 ** (n - 1)))
 k = 0
 while k < mc:
+    predictors = list(g_true.nodes)
+    # sort list to get consistent results across different graphs learned on same features (when using mc)
+    predictors.sort()
+    # remove the target from list of predictors
+    predictors.remove(target)
     # draw index for feature of interest
     ind = random.randint(0, n - 1)
     # retrieve feature of interest
@@ -74,7 +79,7 @@ while k < mc:
 
     else:
         # draw as many as 'card' numbers from range(n-1) as indices for conditioning set
-        indices = rng.choice(n - 2, size=card, replace=False)
+        indices = rng.choice(n - 1, size=card, replace=False)
         cond_set = set()
         for ii in range(len(indices)):
             # index for first
