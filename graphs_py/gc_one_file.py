@@ -50,7 +50,7 @@ except:
 target = args.target
 
 # get a vector of d-separation statement for true graph
-path_true = f"results_py/true_graphs/{args.truepath}].p"
+path_true = f"results_py/true_graphs/{args.truepath}.p"
 g_true = pickle.load(open(path_true, "rb"))
 # number of nodes
 d = len(g_true.nodes)
