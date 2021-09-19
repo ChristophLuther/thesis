@@ -43,6 +43,15 @@ parser.add_argument(
     help="algorithm?",
 )
 
+parser.add_argument(
+    "-mc",
+    "--montecarlo",
+    type=int,
+    default=10000,
+    help="mc samples?",
+)
+
+
 args = parser.parse_args()
 
 # file for comparison
@@ -74,7 +83,7 @@ predictors.sort()
 # remove the target from list of predictors
 predictors.remove(target)
 
-mc = 1000
+mc = args.montecarlo
 # survey_comp = GraphComparison(g_true, g_est, target_node, mc=mc, rand_state=42)
 # TP, TN, FP, FN, true_total, false_total = survey_comp.approx()
 # if random_state is not None:
