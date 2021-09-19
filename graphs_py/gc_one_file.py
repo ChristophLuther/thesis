@@ -35,6 +35,14 @@ parser.add_argument(
     help="graph est?",
 )
 
+parser.add_argument(
+    "-a",
+    "--algorithm",
+    type=str,
+    default="hc",
+    help="algorithm?",
+)
+
 args = parser.parse_args()
 
 # file for comparison
@@ -48,7 +56,7 @@ except:
 
 # TODO make inputs: method, graph, target
 target = args.target
-
+alg = args.algorithm
 # get a vector of d-separation statement for true graph
 path_true = f"results_py/true_graphs/{args.truepath}.p"
 g_true = pickle.load(open(path_true, "rb"))
@@ -57,7 +65,7 @@ d = len(g_true.nodes)
 # number of predictors
 n = d-1
 # get a vector of d-separation statement for estimated graph
-path_est = f"results_py/hc/graphs/{args.estpath}.p"
+path_est = f"results_py/{alg}/graphs/{args.estpath}.p"
 g_est = pickle.load(open(path_est, "rb"))
 
 predictors = list(g_true.nodes)
@@ -136,6 +144,39 @@ for i in range(len(d_seps_true)):
             fn += 1
         else:
             fp += 1
+
 # total number of d-separation among tested nodes (make a node if d-separations were approximated via mc)
 d_separated_total = tp + fn
 d_connected_total = tn + fp
+
+# share of dseps (just make a note, if d-separations were approximated via mc)
+dsep_share = d_separated_total / (d_separated_total + d_connected_total)
+
+# and don't forget to mention the number of mc
+# graph specific table
+# then TP-, TN-, FP-, and FN-rate as above
+if d_separated_total == 0:
+    TP_rate = 0
+    FN_rate = 0
+else:
+    TP_rate = tp / d_separated_total
+    FN_rate = fn / d_separated_total
+if d_connected_total == 0:
+    TN_rate = 0
+    FP_rate = 0
+else:
+    TN_rate = tn / d_connected_total
+    FP_rate = fp / d_connected_total
+
+# F1 score
+precision = tp / (tp + fp)
+recall = TP_rate
+F1 = (2 * precision * recall) / (precision + recall)
+
+
+content = [args.truepath, target, d, alg, mc, d_separated_total, d_connected_total,
+           dsep_share,
+           tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
+# fill evaluation table with current run
+graph_evaluation.loc[len(graph_evaluation)] = content
+graph_evaluation.to_csv("results_py/graph_evaluation.csv", index=False)
