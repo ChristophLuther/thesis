@@ -18,6 +18,7 @@ class GraphComparison:
         self.rand_state = rand_state
 
     def exact(self):
+        # the two dataframes of d-separations
         true_dseps = d_separation(self.g_true, self.y)
         est_dseps = d_separation(self.g_est, self.y)
         # now compare every entry
@@ -46,7 +47,9 @@ class GraphComparison:
 
     def approx(self):
         true_dseps = d_separation(self.g_true, self.y, mc=self.mc, random_state=self.rand_state)
+        print(true_dseps)
         est_dseps = d_separation(self.g_est, self.y, mc=self.mc, random_state=self.rand_state)
+        print(est_dseps)
         # now compare every entry
         tp = 0
         tn = 0
