@@ -88,3 +88,23 @@ while k < mc:
         d_seps_true.append(nx.d_separated(g_true, {node}, {target}, cond_set))
         d_seps_est.append(nx.d_separated(g_est, {node}, {target}, cond_set))
     k += 1
+
+tp = 0
+tn = 0
+fp = 0
+fn = 0
+
+for i in range(len(d_seps_true)):
+    if d_seps_true == d_seps_est:
+        if d_seps_true is True:
+            tp += 1
+        else:
+            tn += 1
+    else:
+        if d_seps_true is True:
+            fn += 1
+        else:
+            fp += 1
+# total number of d-separation among tested nodes (make a node if d-separations were approximated via mc)
+d_separated_total = tp + fn
+d_connected_total = tn + fp
