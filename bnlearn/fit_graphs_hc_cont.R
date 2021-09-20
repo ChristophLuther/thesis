@@ -1,5 +1,5 @@
 # Bayesian network structure learning using hc algorithm (as implemented in bnlearn)
-setwd("~/Desktop/thesis_code")
+#setwd("~/Desktop/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/hc")
 dir.create("bnlearn/results/hc/est_amat")
