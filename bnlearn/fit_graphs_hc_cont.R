@@ -1,5 +1,5 @@
 # Bayesian network structure learning using hc algorithm (as implemented in bnlearn)
-# setwd("~/thesis_code")
+setwd("~/Desktop/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/hc")
 dir.create("bnlearn/results/hc/est_amat")
@@ -13,7 +13,7 @@ set.seed(1902)
 # to loop through different data sets
 graphs_cont <- c("dag_s", "dag_m", "dag_l")
 sizes <- c("s", "m", "l", "xl")
-sample_sizes <- c(1000, 10000, 100000, 1000000)
+sample_sizes <- c("1000", "10000", "1e+05", "1e+06")
 
 # initiate data frame to store metadata like runtime
 table <- data.frame(matrix(ncol = 4, nrow = 0))

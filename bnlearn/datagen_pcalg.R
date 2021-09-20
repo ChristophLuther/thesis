@@ -1,6 +1,6 @@
 # graph generation with pcalg package
 
-# setwd("~/thesis_code")
+setwd("~/Desktop/thesis_code")
 dir.create("data/dag_s")
 dir.create("data/dag_m")
 dir.create("data/dag_l")
@@ -57,7 +57,7 @@ for (i in c(1:3)){
   
   # create and store another data file for test purpose (SAGE experiment)
   data_test <- graph$simulate(100000)
-  filename_test <- paste("data/dag_", token, "/dag_", token, "_train.csv", sep="")
+  filename_test <- paste("data/dag_", token, "/dag_", token, "_test.csv", sep="")
   write.csv(data_test, filename_test, row.names = FALSE)
   
 }
