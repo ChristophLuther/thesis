@@ -50,7 +50,7 @@ for graph in graphs:
     target = targets_mid[graph]
     for size in sizes:
         for alg in algs:
-            path_est = f"results_py/{alg}/graphs/{graphs}_{size}.p"
+            path_est = f"results_py/{alg}/graphs/{graph}_{size}.p"
             g_est = pickle.load(open(path_est, "rb"))
             true_dseps = d_separation(g_true, target)
             est_dseps = d_separation(g_est, target)
@@ -103,8 +103,8 @@ for graph in graphs_mc:
     d = len(g_true.nodes)
     n = d - 1
     probs = []
-    for i in range(n):
-        probs.append((sp.comb(n - 1, i)) / (2 ** (n - 1)))
+    for jj in range(n):
+        probs.append((sp.comb(n - 1, jj)) / (2 ** (n - 1)))
     target = targets_mid[graph]
     predictors = list(g_true.nodes)
     # sort list to get consistent results across different graphs learned on same features (when using mc)
@@ -114,7 +114,7 @@ for graph in graphs_mc:
     mc = 100000
     for size in sizes:
         for alg in algs:
-            path_est = f"results_py/{alg}/graphs/{graphs}_{size}.p"
+            path_est = f"results_py/{alg}/graphs/{graph}_{size}.p"
             g_est = pickle.load(open(path_est, "rb"))
             d_seps_true = []
             d_seps_est = []
