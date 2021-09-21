@@ -183,7 +183,7 @@ recall = TP_rate
 F1 = (2 * precision * recall) / (precision + recall)
 
 
-content = [args.truepath, target, d, alg, mc, d_separated_total, d_connected_total,
+content = [args.estpath, target, d, alg, mc, d_separated_total, d_connected_total,
            dsep_share,
            tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
 # fill evaluation table with current run

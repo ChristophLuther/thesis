@@ -26,8 +26,8 @@ parser.add_argument(
     "-e",
     "--amat",
     type=bool,
-    default=False,
-    help="true amat or estimated?",
+    default=True,
+    help="Is amat estimated? Default is True, i.e. amat is estimated",
 )
 
 args = parser.parse_args()
@@ -36,20 +36,18 @@ args = parser.parse_args()
 create_folder("results_py/")
 
 # specify names of graphs to loop through
-names = ["asia_s", "asia_m", "asia_l", "asia_xl",
-         "sachs_s", "sachs_m", "sachs_l", "sachs_xl",
-         "alarm_s", "alarm_m", "alarm_l", "alarm_xl",
-         "hepar_s", "hepar_m", "hepar_l", "hepar_xl"]
+names = ["dag_s_1000_obs", "dag_s_10000_obs", "dag_s_1e+05_obs", "dag_s_1e+06_obs",
+         "dag_m_1000_obs", "dag_m_10000_obs", "dag_m_1e+05_obs", "dag_m_1e+06_obs",
+         "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_1e+05_obs", "dag_l_1e+06_obs"]
 
-names_true = ["asia", "alarm", "sachs", "hepar"]
+names_true = ["dag_s", "dag_m", "dag_l"]
 
 # specify methods used during structure learning
-methods = ["iiamb", "gs"]
+methods = ["hc", "tabu"]    # TODO  make method an input argument or adapt methods ("h2pc", "mmhc")
 
 
 def convert_amat(arg):
     if arg.amat:
-        print(arg.amat)
         # loop through method in methods
         for method in methods:
             create_folder(f"results_py/{method}")
@@ -57,18 +55,19 @@ def convert_amat(arg):
             for i in names:
                 # load adjacency matrix as csv file
                 df = pd.read_csv(
-                    f"bnlearn/results/{method}/est_amat/{i}.csv"
-                )
-                if i in ["dag_s", "dag_m", "dag_l"]:
-                    col_dict = {}
-                    for k in range(len(df.columns)):
-                        k_key = f"V{k + 1}"
-                        col_dict[k_key] = str(k + 1)
-                    df = df.rename(columns=col_dict)
-                    mapping_rf = {False: 0, True: 1}
-                    col_names = df.columns.tolist()
-                    for j in col_names:
-                        df[j] = df.replace({j: mapping_rf})[j]
+                    f"bnlearn/results/{method}/est_amat/{i}.csv")
+
+                col_names_int = []
+
+                for k in range(len(df.columns)):
+                    col_names_int.append(k+1)
+
+                df.columns = col_names_int
+
+                mapping_rf = {False: 0, True: 1}
+                col_names = df.columns.tolist()
+                for j in col_names:
+                    df[j] = df.replace({j: mapping_rf})[j]
 
                 # modify adjacency matrix for use in networkx package
                 var_names = df.columns.to_list()
@@ -84,16 +83,17 @@ def convert_amat(arg):
         for i in names_true:
             df = pd.read_csv(f"bnlearn/true_amat/{i}.csv")
 
-            if i in ["dag_s", "dag_m", "dag_l"]:
-                col_dict = {}
-                for k in range(len(df.columns)):
-                    k_key = f"V{k+1}"
-                    col_dict[k_key] = str(k+1)
-                df = df.rename(columns=col_dict)
-                mapping_rf = {False: 0, True: 1}
-                col_names = df.columns.tolist()
-                for j in col_names:
-                    df[j] = df.replace({j: mapping_rf})[j]
+            col_names_int = []
+
+            for k in range(len(df.columns)):
+                col_names_int.append(k + 1)
+
+            df.columns = col_names_int
+
+            mapping_rf = {False: 0, True: 1}
+            col_names = df.columns.tolist()
+            for j in col_names:
+                df[j] = df.replace({j: mapping_rf})[j]
 
             var_names = df.columns.to_list()
             df = df.set_axis(var_names, axis=0)
