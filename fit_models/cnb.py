@@ -19,7 +19,6 @@ from functions import create_folder
 create_folder("fitted_models/")
 
 names = ["asia", "alarm", "sachs", "hepar"]
-
 col_names = ["data", "model", "target", "accuracy"]
 cnb_details = pd.DataFrame(columns=col_names)
 

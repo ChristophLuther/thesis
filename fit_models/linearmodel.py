@@ -49,7 +49,7 @@ for i in names:
     r2 = r2_score(y_test, y_pred)
 
     # fill df with info about model
-    lm_details.loc[len(lm_details)] = [i, "lin reg", "V1", mse, r2]
+    lm_details.loc[len(lm_details)] = [i, "lin reg", "1", mse, r2]
 
     # save model
     filename = f"fitted_models/{i}_lm.sav"

@@ -1,5 +1,7 @@
-"""Fit random forest for regression to data, simple template used in CG SAGE project"""
-from sklearn.ensemble import RandomForestRegressor
+# TODO for later if more time left, but conversion of pd.DataFrame to xgb.DMatrix might conflict
+# with SAGE implementation
+"""Fit random xgboost for regression to data, simple template used in CG SAGE project"""
+import xgboost as xgb
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split

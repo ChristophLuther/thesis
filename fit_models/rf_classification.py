@@ -26,6 +26,7 @@ rfcf_details = pd.DataFrame(columns=col_names)
 for i in names:
     # read data
     df = pd.read_csv(f"data/{i}/{i}_train.csv")
+    df = df[0:20000]
     if i == "asia":
         col_names = df.columns.tolist()
         col_names.remove("dysp")
@@ -53,14 +54,14 @@ for i in names:
     )
 
     # fit model
-    rf = RandomForestClassifier()
+    rf = RandomForestClassifier(n_estimators=2500)
     rf.fit(X_train, y_train)
 
     y_pred = rf.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
 
     # fill df with info about model
-    rfcf_details.loc[len(rfcf_details)] = [i, "mnb", "tbd", acc]
+    rfcf_details.loc[len(rfcf_details)] = [i, "rfcf", "tbd", acc]
 
     # save model
     filename = f"fitted_models/{i}_rf.sav"
