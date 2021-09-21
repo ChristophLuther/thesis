@@ -37,7 +37,7 @@ rng = np.random.default_rng(seed=42)
 sizes = ["s", "m", "l", "xl"]
 
 # dictionary to access the respective target
-targets_mid = {"alarm": "CATECHOL", "asia": "dysp", "hepar": "Cirrhosis", "sachs_s": "Erk"}
+targets_mid = {"alarm": "CATECHOL", "asia": "dysp", "hepar": "Cirrhosis", "sachs": "Erk"}
 
 # to loop through graph learning algorithms
 algs = ["hc", "tabu", "mmhc", "h2pc"]
