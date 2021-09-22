@@ -28,7 +28,7 @@ except:
 
 # to loop through graphs
 graphs = ["dag_s"]
-graphs_mc = ["dag_m", "dag_s"]
+graphs_mc = ["dag_m", "dag_l"]
 random.seed(42)
 np.random.seed(42)
 rng = np.random.default_rng(seed=42)
@@ -37,7 +37,7 @@ rng = np.random.default_rng(seed=42)
 sizes = ["1000", "10000", "1e+05", "1e+06"]
 
 # to loop through graph learning algorithms
-algs = ["hc", "tabu"]
+algs = ["hc"] #, "tabu"]
 
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
