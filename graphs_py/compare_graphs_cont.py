@@ -44,7 +44,7 @@ for graph in graphs:
     g_true = pickle.load(open(path_true, "rb"))
     d = len(g_true.nodes)
     n = d - 1
-    target = "1"
+    target = 1
     for size in sizes:
         for alg in algs:
             path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
@@ -102,7 +102,7 @@ for graph in graphs_mc:
     probs = []
     for jj in range(n):
         probs.append((sp.comb(n - 1, jj)) / (2 ** (n - 1)))
-    target = "1"
+    target = 1
     predictors = list(g_true.nodes)
     # sort list to get consistent results across different graphs learned on same features (when using mc)
     predictors.sort()

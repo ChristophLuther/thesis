@@ -1,18 +1,18 @@
 import pickle
 import networkx as nx
 import matplotlib.pyplot as plt
+import networkx as nx
 
-
-path = "results_py/hc/est_amat/dag_m_10000_obs.p"
+path = "results_py/true_graphs/dag_s.p"
 
 
 class Lol:
     def __init__(self, path):
         self.path = path
 
-    def load_amat(self):
-        amat = pickle.load(open(self.path, "rb"))
-        return amat
+    def load_g(self):
+        g = pickle.load(open(self.path, "rb"))
+        return g
 
 
 if __name__ == "__main__":

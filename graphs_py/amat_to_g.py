@@ -26,7 +26,7 @@ parser.add_argument(
     "-e",
     "--amat",
     type=bool,
-    default=True,
+    default=False,
     help="Is amat estimated? Default is True, i.e. amat is estimated",
 )
 
