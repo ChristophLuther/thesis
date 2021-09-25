@@ -25,21 +25,21 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-a",
     "--amat",
-    type=bool,
-    default=False,
-    help="Is amat estimated? Default is True, i.e. amat is estimated",
-)
+    type=str,
+    default="estimated",
+    help="Is amat estimated? Default is True, i.e. amat is estimated")
 
 parser.add_argument(
     "-d",
     "--data",
-    type=bool,
+    type=str,
     default="discrete",
     help="Discrete or Continuous data?",
 )
 
 args = parser.parse_args()
-
+print(args.amat)
+print(args.data)
 # create folder to store models
 create_folder("results_py/")
 
@@ -63,7 +63,7 @@ else:
 
 
 def convert_amat(arg):
-    if arg.amat:
+    if arg.amat == "estimated":
         # loop through method in methods
         for method in methods:
             create_folder(f"results_py/{method}")
