@@ -1,9 +1,6 @@
 # graph generation with pcalg package
 
 setwd("~/Desktop/thesis_code")
-dir.create("data/dag_s")
-dir.create("data/dag_m")
-dir.create("data/dag_l")
 #dir.create("data/dag_xl")
 
 # install packages if necessary 
@@ -35,7 +32,7 @@ for (i in c(1:3)){
   
   # randomly generate DAG
   graph <- r.gauss.pardag(p, prob=prob, top.sort = FALSE, normalize = FALSE,
-                          lbe = 0.1, ube = 5, neg.coef = TRUE, labels = as.character(1:p),
+                          lbe = 0.1, ube = 1, neg.coef = TRUE, labels = as.character(1:p),
                           lbv = 0.5, ubv = 1)
   
   # get Boolean adjacency matrix and store it
@@ -43,21 +40,9 @@ for (i in c(1:3)){
   amat_name <- paste("bnlearn/true_amat/dag_", token, ".csv", sep="")
   write.csv(amat, amat_name, row.names = FALSE)
   
-  # create data sets of four different sizes and store them
-  for (j in c(1000, 10000, 100000, 1000000)){
-    data <- graph$simulate(j)
-    filename <- paste("data/dag_", token, "/dag_", token, "_",  j,"_obs.csv", sep="")
-    write.csv(data, filename, row.names = FALSE)
-  }
-  
   # create and store another data file for model training
-  data_train <- graph$simulate(100000)
-  filename_train <- paste("data/dag_", token, "/dag_", token, "_train.csv", sep="")
-  write.csv(data_train, filename_train, row.names = FALSE)
-  
-  # create and store another data file for test purpose (SAGE experiment)
-  data_test <- graph$simulate(100000)
-  filename_test <- paste("data/dag_", token, "/dag_", token, "_test.csv", sep="")
-  write.csv(data_test, filename_test, row.names = FALSE)
+  data <- graph$simulate(2000000)
+  filename <- paste("data/dag_", token, ".csv", sep="")
+  write.csv(data, filename, row.names = FALSE)
   
 }

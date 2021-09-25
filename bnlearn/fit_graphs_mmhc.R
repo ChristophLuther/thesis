@@ -3,6 +3,7 @@
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/mmhc")
 dir.create("bnlearn/results/mmhc/est_amat")
+
 #install.packages("bnlearn")
 library("bnlearn")
 
@@ -11,8 +12,7 @@ set.seed(1902)
 
 # to loop through different data sets
 graphs_discrete <- c("alarm", "asia", "hepar", "sachs")
-sizes <- c("s", "m", "l", "xl")
-sample_sizes <- c(1000, 10000, 100000, 1000000)
+sample_sizes <- c(1000, 10000, 100000, 1000000, 2000000)
 
 # initiate data frame to store metadata like runtime
 table <- data.frame(matrix(ncol = 4, nrow = 0))
@@ -20,28 +20,28 @@ col_names <- c("Graph", "n sample size", "algorithm", "runtime in s")
 colnames(table) <- col_names
 
 for (i in graphs_discrete){
+  # load data
+  filename <- paste("data/", i, "/", i, ".csv", sep="")
+  df <- read.csv(filename)
   
-  for (k in c(1:4)){
+  # as.factor() required for bnlearn.mmhc()
+  for (j in colnames(df)){
+    df[,j] <- as.factor(df[,j]) 
+  }
+  
+  for (sample_size in sample_sizes){
     
-    size <- sizes[k]
-    sample_size <- sample_sizes[k]
-    # load data
-    filename <- paste("data/", i, "/", i, "_", size, ".csv", sep="")
-    df <- read.csv(filename)
-    
-    # as.factor() required for bnlearn.mmhc()
-    for (j in colnames(df)){
-      df[,j] <- as.factor(df[,j]) 
-    }
+    # sample sample_size data from the dataset
+    data_fit <- df[1:sample_size,]
     
     # structure learning and wall time
-    runtime <- system.time({ bn <- mmhc(df) })
+    runtime <- system.time({ bn <- mmhc(data_fit) })
     runtime <- runtime["elapsed"]
     table[nrow(table) + 1,] = c(i, sample_size, "mmhc", runtime)
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/mmhc/est_amat/", i, "_", size, ".csv", sep="")
+    amat_file <- paste("bnlearn/results/mmhc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
