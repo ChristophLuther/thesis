@@ -102,8 +102,51 @@ fig.legend([l1, l2, l3, l4],     # The line objects
            )
 
 # plt.savefig("visualization/dseps/test.png")
-plt.show()
+# plt.show()
 plt.clf()
 
 
 # plot number of inferred d-seps / number of true d-seps
+
+# now for cont
+
+y1 = df[df['method'] == "hc"]  # hc
+y2 = df[df['method'] == "tabu"]   # tabu
+
+y1_s = y1[y1['d'] == 10]["F1"]
+y2_s = y2[y2['d'] == 10]["F1"]
+
+y1_m = y1[y1['d'] == 50]["F1"]
+y2_m = y2[y2['d'] == 50]["F1"]
+
+y1_l = y1[y1['d'] == 100]["F1"]
+y2_l = y2[y2['d'] == 100]["F1"]
+
+fig, axes = plt.subplots(1, 3, figsize=(9, 3))
+fig.suptitle("F1 Score - D-Separation Inference", fontsize=12)
+
+axes[0].scatter(x, y1_s, color='c')
+axes[0].scatter(x, y2_s, color='y')
+l1 = axes[0].plot(x, y1_s, color='c', linestyle='-', markevery=mark)
+l2 = axes[0].plot(x, y2_s, color='y', linestyle=':', markevery=mark)
+
+axes[1].scatter(x, y1_m, color='c')
+axes[1].scatter(x, y2_m, color='y')
+axes[1].plot(x, y1_m, color='c', linestyle='-', markevery=mark)
+axes[1].plot(x, y2_m, color='y', linestyle=':', markevery=mark)
+
+axes[2].scatter(x, y1_l, color='c')
+axes[2].scatter(x, y2_l, color='y')
+axes[2].plot(x, y1_l, color='c', linestyle='-', markevery=mark)
+axes[2].plot(x, y2_l, color='y', linestyle=':', markevery=mark)
+
+line_labels = ["hc", "tabu"]
+fig.legend([l1, l2],     # The line objects
+           labels=line_labels,   # The labels for each line
+           loc="center right",   # Position of legend
+           borderaxespad=0.1,    # Small spacing around legend box
+           title="Legend Title"  # Title for the legend
+           )
+
+plt.show()
+plt.clf()
