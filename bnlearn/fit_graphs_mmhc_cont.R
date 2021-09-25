@@ -1,8 +1,8 @@
-# Bayesian network structure learning using mmhcc algorithm (as implemented in bnlearn)
+# Bayesian network structure learning using mmhc algorithm (as implemented in bnlearn)
 #setwd("~/Desktop/thesis_code")
 dir.create("bnlearn/results")
-dir.create("bnlearn/results/mmhcc")
-dir.create("bnlearn/results/mmhcc/est_amat")
+dir.create("bnlearn/results/mmhc")
+dir.create("bnlearn/results/mmhc/est_amat")
 
 #install.packages("bnlearn")
 library("bnlearn")
@@ -21,7 +21,7 @@ colnames(table) <- col_names
 
 for (i in graphs_cont){
   # load data
-  filename <- paste("data/", i, "/", i, ".csv", sep="")
+  filename <- paste("data/", i, ".csv", sep="")
   df <- read.csv(filename)
   
   for (sample_size in sample_sizes){
@@ -30,38 +30,38 @@ for (i in graphs_cont){
     
     # if conditions only necessary for the respective graphs (unused)
     if (i == "healthcare"){
-      # as.factor() required for bnlearn.mmhcc()
+      # as.factor() required for bnlearn.mmhc()
       for (j in c("A", "C", "H")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     if (i == "mehra"){
-      # as.factor() required for bnlearn.mmhcc()
+      # as.factor() required for bnlearn.mmhc()
       for (j in c("Region", "Zone", "Type", "Season", "Year", "Month", "Day", "Hour")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     if (i == "sangiovese"){
-      # as.factor() required for bnlearn.mmhcc()
+      # as.factor() required for bnlearn.mmhc()
       for (j in c("Treatment")){
         df[,j] <- as.factor(df[,j]) 
       }
     }
     
     # structure learning and wall time
-    runtime <- system.time({ bn <- mmhcc(data_fit) })
+    runtime <- system.time({ bn <- mmhc(data_fit) })
     runtime <- runtime["elapsed"]
-    table[nrow(table) + 1,] = c(i, sample_size, "mmhcc", runtime)
+    table[nrow(table) + 1,] = c(i, sample_size, "mmhc", runtime)
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/mmhcc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
+    amat_file <- paste("bnlearn/results/mmhc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
 
 # save table
-write.csv(table,"bnlearn/results/mmhcc/runtime_data_cont.csv", row.names = FALSE)
+write.csv(table,"bnlearn/results/mmhc/runtime_data_cont.csv", row.names = FALSE)
 

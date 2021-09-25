@@ -21,7 +21,7 @@ colnames(table) <- col_names
 
 for (i in graphs_cont){
   # load data
-  filename <- paste("data/", i, "/", i, ".csv", sep="")
+  filename <- paste("data/", i, ".csv", sep="")
   df <- read.csv(filename)
   
   for (sample_size in sample_sizes){
