@@ -73,7 +73,7 @@ def convert_amat(arg):
                 df = pd.read_csv(
                     f"bnlearn/results/{method}/est_amat/{i}.csv")
 
-                if args.data == "continuous":
+                if arg.data == "continuous":
                     col_names_int = []
                     for k in range(len(df.columns)):
                         col_names_int.append(k+1)
@@ -98,7 +98,7 @@ def convert_amat(arg):
         for i in names_true:
             df = pd.read_csv(f"bnlearn/true_amat/{i}.csv")
 
-            if args.data == "continuous":
+            if arg.data == "continuous":
                 col_names_int = []
                 for k in range(len(df.columns)):
                     col_names_int.append(k + 1)
