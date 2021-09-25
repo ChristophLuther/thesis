@@ -27,7 +27,7 @@ lm_details = pd.DataFrame(columns=col_names)
 # read data
 for i in names:
 
-    df = pd.read_csv(f"data/{i}/{i}_train.csv")
+    df = pd.read_csv(f"data/{i}.csv")
     col_names = df.columns.tolist()
     # We use "1" as target, since we randomly sampled edges, this is w.l.o.g. a target at a random
     # position in the graph

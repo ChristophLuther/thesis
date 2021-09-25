@@ -25,7 +25,7 @@ mnb_details = pd.DataFrame(columns=col_names)
 
 for i in names:
     # read data
-    df = pd.read_csv(f"data/{i}/{i}_train.csv")
+    df = pd.read_csv(f"data/{i}.csv")
     if i == "asia":
         col_names = df.columns.tolist()
         col_names.remove("dysp")

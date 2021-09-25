@@ -27,7 +27,7 @@ rfreg_details = pd.DataFrame(columns=col_names)
 # read data
 for i in names:
 
-    df = pd.read_csv(f"data/{i}/{i}_train.csv")
+    df = pd.read_csv(f"data/{i}.csv")
     col_names = df.columns.tolist()
     # We use "V1" as target, since we randomly sampled edges, this is w.l.o.g. a target at a random
     # position in the graph
@@ -41,7 +41,7 @@ for i in names:
     )
 
     # fit model
-    rf = RandomForestRegressor(n_estimators=1000)
+    rf = RandomForestRegressor(n_estimators=100)
     rf.fit(X_train, y_train)
 
     y_pred = rf.predict(X_test)
