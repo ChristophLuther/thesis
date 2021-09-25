@@ -1,8 +1,8 @@
-# Bayesian network structure learning using tabu algorithm (as implemented in bnlearn)
+# Bayesian network structure learning using hc algorithm (as implemented in bnlearn)
 # setwd("~/thesis_code")
 dir.create("bnlearn/results")
-dir.create("bnlearn/results/tabu")
-dir.create("bnlearn/results/tabu/est_amat")
+dir.create("bnlearn/results/hc")
+dir.create("bnlearn/results/hc/est_amat")
 
 #install.packages("bnlearn")
 library("bnlearn")
@@ -24,7 +24,7 @@ for (i in graphs_discrete){
   filename <- paste("data/", i, "/", i, ".csv", sep="")
   df <- read.csv(filename)
   
-  # as.factor() required for bnlearn.tabu()
+  # as.factor() required for bnlearn.hc()
   for (j in colnames(df)){
     df[,j] <- as.factor(df[,j]) 
   }
@@ -35,17 +35,17 @@ for (i in graphs_discrete){
     data_fit <- df[1:sample_size,]
     
     # structure learning and wall time
-    runtime <- system.time({ bn <- tabu(data_fit) })
+    runtime <- system.time({ bn <- hc(data_fit) })
     runtime <- runtime["elapsed"]
-    table[nrow(table) + 1,] = c(i, sample_size, "tabu", runtime)
+    table[nrow(table) + 1,] = c(i, sample_size, "hc", runtime)
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/tabu/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
+    amat_file <- paste("bnlearn/results/hc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
 
 # save table
-write.csv(table,"bnlearn/results/tabu/runtime_data_discrete.csv", row.names = FALSE)
+write.csv(table,"bnlearn/results/hc/runtime_data_discrete.csv", row.names = FALSE)
 
