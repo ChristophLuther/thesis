@@ -15,7 +15,6 @@ sys.path.insert(0, parent_dir)
 from functions import d_separation
 
 
-
 # file for comparison
 try:
     graph_evaluation = pd.read_csv("results_py/graph_evaluation.csv")
@@ -34,13 +33,13 @@ np.random.seed(42)
 rng = np.random.default_rng(seed=42)
 
 # to loop through sizes
-sizes = ["s", "m", "l", "xl"]
-
-# dictionary to access the respective target
-targets_mid = {"alarm": "CATECHOL", "asia": "dysp", "hepar": "Cirrhosis", "sachs": "Erk"}
+sizes = ["1000", "10000", "1e+05", "1e+06", "2e+06"]
 
 # to loop through graph learning algorithms
 algs = ["hc", "tabu", "mmhc", "h2pc"]
+
+# target dict
+targets_mid = {"alarm": "CATECHOL", "asia": "dysp", "hepar": "Cirrhosis", "sachs": "Erk"}
 
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
@@ -50,7 +49,7 @@ for graph in graphs:
     target = targets_mid[graph]
     for size in sizes:
         for alg in algs:
-            path_est = f"results_py/{alg}/graphs/{graph}_{size}.p"
+            path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
             g_est = pickle.load(open(path_est, "rb"))
             true_dseps = d_separation(g_true, target)
             est_dseps = d_separation(g_est, target)
@@ -91,7 +90,7 @@ for graph in graphs:
             precision = tp / (tp + fp)
             recall = TP_rate
             F1 = (2 * precision * recall) / (precision + recall)
-            content = [f"{graph}_{size}", target, d, alg, "n/a", d_separated_total, d_connected_total,
+            content = [f"{graph}_{size}_obs", target, d, alg, "n/a", d_separated_total, d_connected_total,
                        dsep_share, tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
             # fill evaluation table with current run
             graph_evaluation.loc[len(graph_evaluation)] = content
@@ -111,10 +110,10 @@ for graph in graphs_mc:
     predictors.sort()
     # remove the target from list of predictors
     predictors.remove(target)
-    mc = 100000
+    mc = 1000000
     for size in sizes:
         for alg in algs:
-            path_est = f"results_py/{alg}/graphs/{graph}_{size}.p"
+            path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
             g_est = pickle.load(open(path_est, "rb"))
             d_seps_true = []
             d_seps_est = []

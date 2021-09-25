@@ -23,11 +23,19 @@ parser = argparse.ArgumentParser(
     description="convert adjacency matrix to format for nx")
 
 parser.add_argument(
-    "-e",
+    "-a",
     "--amat",
     type=bool,
     default=False,
     help="Is amat estimated? Default is True, i.e. amat is estimated",
+)
+
+parser.add_argument(
+    "-d",
+    "--data",
+    type=bool,
+    default="discrete",
+    help="Discrete or Continuous data?",
 )
 
 args = parser.parse_args()
@@ -36,14 +44,22 @@ args = parser.parse_args()
 create_folder("results_py/")
 
 # specify names of graphs to loop through
-names = ["dag_s_1000_obs", "dag_s_10000_obs", "dag_s_1e+05_obs", "dag_s_1e+06_obs",
-         "dag_m_1000_obs", "dag_m_10000_obs", "dag_m_1e+05_obs", "dag_m_1e+06_obs",
-         "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_1e+05_obs", "dag_l_1e+06_obs"]
+if args.data == "discrete":
+    names = ["sachs_1000_obs", "sachs_10000_obs", "sachs_1e+05_obs", "sachs_1e+06_obs", "sachs_2e+06_obs",
+             "asia_1000_obs", "asia_10000_obs", "asia_1e+05_obs", "asia_1e+06_obs", "asia_2e+06_obs",
+             "alarm_1000_obs", "alarm_10000_obs", "alarm_1e+05_obs", "alarm_1e+06_obs", "alarm_2e+06_obs",
+             "hepar_1000_obs", "hepar_10000_obs", "hepar_1e+05_obs", "hepar_1e+06_obs", "hepar_2e+06_obs"]
 
-names_true = ["dag_s", "dag_m", "dag_l"]
+    names_true = ["sachs", "asia", "alarm", "hepar"]
+    methods = ["hc", "tabu", "mmhc", "h2pc"]
 
-# specify methods used during structure learning
-methods = ["hc", "tabu"]    # TODO  make method an input argument or adapt methods ("h2pc", "mmhc")
+else:
+    names = ["dag_s_1000_obs", "dag_s_10000_obs", "dag_s_1e+05_obs", "dag_s_1e+06_obs", "dag_s_2e+06_obs",
+             "dag_m_1000_obs", "dag_m_10000_obs", "dag_m_1e+05_obs", "dag_m_1e+06_obs", "dag_m_2e+06_obs",
+             "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_1e+05_obs", "dag_l_1e+06_obs", "dag_l_2e+06_obs"]
+
+    names_true = ["dag_s", "dag_m", "dag_l"]
+    methods = ["hc", "tabu", "mmhc"]
 
 
 def convert_amat(arg):
@@ -57,12 +73,11 @@ def convert_amat(arg):
                 df = pd.read_csv(
                     f"bnlearn/results/{method}/est_amat/{i}.csv")
 
-                col_names_int = []
-
-                for k in range(len(df.columns)):
-                    col_names_int.append(k+1)
-
-                df.columns = col_names_int
+                if args.data == "continuous":
+                    col_names_int = []
+                    for k in range(len(df.columns)):
+                        col_names_int.append(k+1)
+                    df.columns = col_names_int
 
                 mapping_rf = {False: 0, True: 1}
                 col_names = df.columns.tolist()
@@ -83,12 +98,11 @@ def convert_amat(arg):
         for i in names_true:
             df = pd.read_csv(f"bnlearn/true_amat/{i}.csv")
 
-            col_names_int = []
-
-            for k in range(len(df.columns)):
-                col_names_int.append(k + 1)
-
-            df.columns = col_names_int
+            if args.data == "continuous":
+                col_names_int = []
+                for k in range(len(df.columns)):
+                    col_names_int.append(k + 1)
+                df.columns = col_names_int
 
             mapping_rf = {False: 0, True: 1}
             col_names = df.columns.tolist()

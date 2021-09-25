@@ -34,10 +34,10 @@ np.random.seed(42)
 rng = np.random.default_rng(seed=42)
 
 # to loop through sizes
-sizes = ["1000", "10000", "1e+05", "1e+06"]
+sizes = ["1000", "10000", "1e+05", "1e+06", "2e+06"]
 
 # to loop through graph learning algorithms
-algs = ["hc", "tabu"]
+algs = ["hc", "tabu", "mmhc"]
 
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
@@ -108,7 +108,7 @@ for graph in graphs_mc:
     predictors.sort()
     # remove the target from list of predictors
     predictors.remove(target)
-    mc = 100000
+    mc = 1000000
     for size in sizes:
         for alg in algs:
             path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
