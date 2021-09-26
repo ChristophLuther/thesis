@@ -59,7 +59,7 @@ else:
              "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_100000_obs", "dag_l_1000000_obs", "dag_l_2000000_obs"]
 
     names_true = ["dag_s", "dag_m", "dag_l"]
-    methods = ["hc", "tabu", "mmhc"]
+    methods = ["hc", "tabu"]
 
 
 def convert_amat(arg):
