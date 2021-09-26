@@ -54,9 +54,9 @@ if args.data == "discrete":
     methods = ["hc", "tabu", "mmhc", "h2pc"]
 
 else:
-    names = ["dag_s_1000_obs", "dag_s_10000_obs", "dag_s_1e+05_obs", "dag_s_1e+06_obs", "dag_s_2e+06_obs",
-             "dag_m_1000_obs", "dag_m_10000_obs", "dag_m_1e+05_obs", "dag_m_1e+06_obs", "dag_m_2e+06_obs",
-             "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_1e+05_obs", "dag_l_1e+06_obs", "dag_l_2e+06_obs"]
+    names = ["dag_s_1000_obs", "dag_s_10000_obs", "dag_s_100000_obs", "dag_s_1000000_obs", "dag_s_2000000_obs",
+             "dag_m_1000_obs", "dag_m_10000_obs", "dag_m_100000_obs", "dag_m_1000000_obs", "dag_m_2000000_obs",
+             "dag_l_1000_obs", "dag_l_10000_obs", "dag_l_100000_obs", "dag_l_1000000_obs", "dag_l_2000000_obs"]
 
     names_true = ["dag_s", "dag_m", "dag_l"]
     methods = ["hc", "tabu", "mmhc"]

@@ -34,7 +34,7 @@ np.random.seed(42)
 rng = np.random.default_rng(seed=42)
 
 # to loop through sizes
-sizes = ["1000", "10000", "1e+05", "1e+06", "2e+06"]
+sizes = ["1000", "10000", "100000", "1000000", "2000000"]
 
 # to loop through graph learning algorithms
 algs = ["hc", "tabu", "mmhc"]
