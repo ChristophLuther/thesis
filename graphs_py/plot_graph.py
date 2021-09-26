@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import networkx as nx
 
-path = "results_py/true_graphs/dag_s.p"
+path = "results_py/true_amat/dag_s.p"
 
 
 class Lol:
