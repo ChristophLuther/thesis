@@ -27,8 +27,9 @@ except:
 
 
 # to loop through graphs
-graphs = ["dag_s"]
-graphs_mc = ["dag_m", "dag_l"]
+# graphs = ["dag_s"]
+# graphs_mc = ["dag_m", "dag_l"]
+graphs_mc = ["dag_l"]
 random.seed(42)
 np.random.seed(42)
 rng = np.random.default_rng(seed=42)
