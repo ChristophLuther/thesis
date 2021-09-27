@@ -35,11 +35,12 @@ np.random.seed(42)
 rng = np.random.default_rng(seed=42)
 
 # to loop through sizes
-sizes = ["1000", "10000", "100000", "1000000", "2000000"]
+# sizes = ["1000", "10000", "100000", "1000000", "2000000"]
+sizes = ["1000000", "2000000"]
 
 # to loop through graph learning algorithms
-algs = ["hc", "tabu"]
-
+# algs = ["hc", "tabu"]
+algs = ["hc"]
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
     g_true = pickle.load(open(path_true, "rb"))
