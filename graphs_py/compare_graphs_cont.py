@@ -27,20 +27,19 @@ except:
 
 
 # to loop through graphs
-# graphs = ["dag_s"]
-# graphs_mc = ["dag_m", "dag_l"]
-graphs_mc = ["dag_l"]
+graphs = ["dag_s"]
+graphs_mc = ["dag_m", "dag_l"]
+
 random.seed(42)
 np.random.seed(42)
 rng = np.random.default_rng(seed=42)
 
 # to loop through sizes
-# sizes = ["1000", "10000", "100000", "1000000", "2000000"]
-sizes = ["1000000", "2000000"]
+sizes = ["1000", "10000", "100000", "1000000", "2000000"]
 
 # to loop through graph learning algorithms
-# algs = ["hc", "tabu"]
-algs = ["hc"]
+algs = ["hc", "tabu"]
+
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
     g_true = pickle.load(open(path_true, "rb"))
