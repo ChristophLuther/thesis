@@ -17,7 +17,7 @@ from functions import d_separation
 
 # file for comparison
 try:
-    graph_evaluation = pd.read_csv("results_py/graph_evaluation.csv")
+    graph_evaluation = pd.read_csv("results_py/graph_evaluation2.csv")
 except:
     col_names = ["graph", "target_node", "d", "method", "mc",
                  "true_total", "false_total", "dsep_share", "TP", "TN", "FP", "FN", "TP_rate",
@@ -39,7 +39,7 @@ sizes = ["1000", "10000", "1e+05", "1e+06", "2e+06"]
 algs = ["hc", "tabu", "mmhc", "h2pc"]
 
 # target dict
-targets_mid = {"alarm": "CATECHOL", "asia": "dysp", "hepar": "Cirrhosis", "sachs": "Erk"}
+targets_mid = {"alarm": "PULMEMBOLUS", "asia": "dysp", "hepar": "RHepatitis", "sachs": "Erk"}
 
 for graph in graphs:
     path_true = f"results_py/true_graphs/{graph}.p"
@@ -94,7 +94,7 @@ for graph in graphs:
                        dsep_share, tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
             # fill evaluation table with current run
             graph_evaluation.loc[len(graph_evaluation)] = content
-            graph_evaluation.to_csv("results_py/graph_evaluation.csv", index=False)
+            graph_evaluation.to_csv("results_py/graph_evaluation2.csv", index=False)
 
 for graph in graphs_mc:
     path_true = f"results_py/true_graphs/{graph}.p"
@@ -191,4 +191,4 @@ for graph in graphs_mc:
                        dsep_share, tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
             # fill evaluation table with current run
             graph_evaluation.loc[len(graph_evaluation)] = content
-            graph_evaluation.to_csv("results_py/graph_evaluation.csv", index=False)
+            graph_evaluation.to_csv("results_py/graph_evaluation2.csv", index=False)
