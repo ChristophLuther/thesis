@@ -1,42 +1,45 @@
 """Added d-separation test"""
 
-# TODO track delta values and corresponding permutations (or better coalitions) (with mlflow?)
+# TODO Add seed to make cg sage and sage comparable
 
 import numpy as np
+import pandas as pd
 from sage import utils, core
 from tqdm.auto import tqdm
 import networkx as nx   # (CL)
 
 
 class PermutationEstimator:
-    '''
+    """
     Estimate SAGE values by unrolling permutations of feature indices.
 
     Args:
       imputer: model that accommodates held out features.
       loss: loss function ('mse', 'cross entropy').
-    '''
+    """
     def __init__(self,
                  imputer,
                  loss='cross entropy',
                  dsep_test=False,
                  adj_mat=None,
                  col_names=None,
-                 target=None):
+                 target=None,
+                 track_deltas=False):
         self.imputer = imputer
         self.loss_fn = utils.get_loss(loss, reduction='none')
         self.dsep_test = dsep_test
         self.adj_mat = adj_mat
         self.col_names = col_names
         self.target = target
+        self.track_deltas = track_deltas
 
     def __call__(self,
                  X,
                  Y=None,
                  batch_size=1,  # TODO batch_size back to 512
-                 detect_convergence=True,
+                 detect_convergence=False,
                  thresh=0.025,
-                 n_permutations=None,
+                 n_permutations=1000,
                  min_coalition=0.0,
                  max_coalition=1.0,
                  verbose=False,
@@ -111,12 +114,24 @@ class PermutationEstimator:
             else:
                 bar = tqdm(total=n_loops * batch_size * num_features)
 
+        # CL track deltas
+        if self.track_deltas:
+            if self.col_names is None:
+                raise ValueError("Delta tracking requires column names")
+            # initiate df to track deltas, corresponding coalition and if applicable d-sep status
+            foi_tracker = []
+            coalition_tracker = []
+            single_deltas = []
+            if self.dsep_test:
+                d_sep_tracker = []
+
         # Setup.
         arange = np.arange(batch_size)
         scores = np.zeros((batch_size, num_features))
         S = np.zeros((batch_size, num_features), dtype=bool)
         permutations = np.tile(np.arange(num_features), (batch_size, 1))
         tracker = utils.ImportanceTracker()
+
         if self.dsep_test:
             g = nx.DiGraph(self.adj_mat)
             nodes = list(g.nodes)
@@ -135,9 +150,7 @@ class PermutationEstimator:
             for i in range(batch_size):
                 np.random.shuffle(permutations[i])  # CL: as many permutations of the features as batches
             # CL: permutations[i] is now a shuffled array of numeric feature indices
-            print("perm", permutations)
-            print(permutations[0])
-            print(permutations[0][0])
+
             # Calculate sample counts.
             if relaxed:
                 scores[:] = 0
@@ -158,27 +171,40 @@ class PermutationEstimator:
 
             # Add all remaining features.
             for i in range(min_coalition, max_coalition):
+                current_coalition = {self.col_names[permutations[0][min_coalition]]}
+                for j in range(min_coalition, i):
+                    current_coalition.add(self.col_names[permutations[0][j]])
+                if self.track_deltas:
+                    foi_tracker.append(self.col_names[permutations[0][i]])
+                    coalition_tracker.append(current_coalition)
+
                 # Add next feature.
                 inds = permutations[:, i]   # CL: batch_size observations for feature i
                 S[arange, inds] = 1
                 # TODO can you do this batch wise?
-                # CL I need from permutations[i] the permutations[i][j] number as index for colnames
+                # CL I need from permutations[i] the permutations[i][j] number as index for col_names
                 # then I can also go through all batch_sizes
                 if self.dsep_test:
                     if i == 0:
-                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, set(self.target), set())
+                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, {self.target}, set())
                     else:
                         cond_set = {self.col_names[permutations[0][min_coalition]]}
                         for j in range(min_coalition, i):
                             cond_set.add(self.col_names[permutations[0][j]])
-                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, set(self.target), cond_set)
+                        dsep = nx.d_separated(g, {self.col_names[permutations[0][i]]}, {self.target}, cond_set)
+                    if self.track_deltas:
+                        d_sep_tracker.append(dsep)
                     if dsep:
                         scores[arange, inds] = 0
+                        if self.track_deltas:
+                            single_deltas.append(0)
                     else:
                         # Make prediction with missing features.
                         y_hat = self.imputer(x, S)
                         loss = self.loss_fn(y_hat, y)
                         scores[arange, inds] = prev_loss - loss
+                        if self.track_deltas:
+                            single_deltas.append(prev_loss - loss)
                         prev_loss = loss
 
                 else:
@@ -186,6 +212,8 @@ class PermutationEstimator:
                     y_hat = self.imputer(x, S)
                     loss = self.loss_fn(y_hat, y)
                     scores[arange, inds] = prev_loss - loss
+                    if self.track_deltas:
+                        single_deltas.append(prev_loss - loss)
                     prev_loss = loss
 
 
@@ -194,7 +222,6 @@ class PermutationEstimator:
                     bar.update(batch_size)
 
             # Update tracker.
-            print(scores, len(scores))
             tracker.update(scores, sample_counts)
 
             # Calculate progress.
@@ -231,4 +258,14 @@ class PermutationEstimator:
         if bar:
             bar.close()
 
-        return core.Explanation(tracker.values, tracker.std, explanation_type)
+        if self.track_deltas:
+            delta_tracker = pd.DataFrame()
+            delta_tracker["foi"] = foi_tracker
+            delta_tracker["coalition"] = coalition_tracker
+            delta_tracker["deltas"] = single_deltas
+            if self.dsep_test:
+                delta_tracker["d-separated"] = d_sep_tracker
+
+            return core.Explanation(tracker.values, tracker.std, explanation_type), delta_tracker
+        else:
+            return core.Explanation(tracker.values, tracker.std, explanation_type)
