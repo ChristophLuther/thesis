@@ -11,7 +11,7 @@ library("bnlearn")
 set.seed(1902)
 
 # to loop through different data sets
-graphs_cont <- c("dag_s", "dag_m", "dag_l")
+graphs_cont <- c("dag_sm")
 sample_sizes <- c("1000", "10000", "100000", "1000000", "2000000")
 
 # initiate data frame to store metadata like runtime
@@ -63,5 +63,5 @@ for (i in graphs_cont){
 }
 
 # save table
-write.csv(table,"bnlearn/results/hc/runtime_data_cont.csv", row.names = FALSE)
+write.csv(table,"bnlearn/results/hc/runtime_data_cont_sm.csv", row.names = FALSE)
 

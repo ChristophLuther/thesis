@@ -16,15 +16,15 @@ library(pcalg)
 set.seed(1902)
 
 # number of nodes for small to large graph
-size = c(10, 50, 100)
+size = c(20)
 
 # probabilities for each pair of nodes to share an edge
-probs = c(2/9, 3/49, 3/99)
+probs = c(3/19)
 
 # names of graphs
-size_tokens = c("s", "m", "l")
+size_tokens = c("sm")
 
-for (i in c(1:3)){
+for (i in c(1:1)){
   
   p = size[i]
   prob = probs[i]
