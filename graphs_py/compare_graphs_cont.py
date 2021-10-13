@@ -27,8 +27,8 @@ except:
 
 
 # to loop through graphs
-graphs = ["dag_s"]
-graphs_mc = ["dag_m", "dag_l"]
+# graphs = []
+graphs_mc = ["dag_sm"]
 
 random.seed(42)
 np.random.seed(42)
@@ -39,62 +39,62 @@ sizes = ["1000", "10000", "100000", "1000000", "2000000"]
 
 # to loop through graph learning algorithms
 algs = ["hc", "tabu"]
-
-for graph in graphs:
-    path_true = f"results_py/true_graphs/{graph}.p"
-    g_true = pickle.load(open(path_true, "rb"))
-    d = len(g_true.nodes)
-    n = d - 1
-    target = "1"
-    for size in sizes:
-        for alg in algs:
-            path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
-            g_est = pickle.load(open(path_est, "rb"))
-            true_dseps = d_separation(g_true, target)
-            est_dseps = d_separation(g_est, target)
-            # now compare every entry
-            tp = 0
-            tn = 0
-            fp = 0
-            fn = 0
-            for i in range(true_dseps.shape[0]):
-                for j in range(true_dseps.shape[1]):
-                    if true_dseps.iloc[i, j] == est_dseps.iloc[i, j]:
-                        if true_dseps.iloc[i, j] is True:
-                            tp += 1
-                        else:
-                            tn += 1
-                    else:
-                        if true_dseps.iloc[i, j] is True:
-                            fn += 1
-                        else:
-                            fp += 1
-            d_separated_total = tp + fn
-            d_connected_total = tn + fp
-            # share of dseps (just make a note, if d-separations were approximated via mc)
-            dsep_share = d_separated_total / (d_separated_total + d_connected_total)
-            if d_separated_total == 0:
-                TP_rate = 0
-                FN_rate = 0
-            else:
-                TP_rate = tp / d_separated_total
-                FN_rate = fn / d_separated_total
-            if d_connected_total == 0:
-                TN_rate = 0
-                FP_rate = 0
-            else:
-                TN_rate = tn / d_connected_total
-                FP_rate = fp / d_connected_total
-            # F1 score
-            precision = tp / (tp + fp)
-            recall = TP_rate
-            F1 = (2 * precision * recall) / (precision + recall)
-            content = [f"{graph}_{size}_obs", target, d, alg, "n/a", d_separated_total, d_connected_total,
-                       dsep_share, tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
-            # fill evaluation table with current run
-            graph_evaluation.loc[len(graph_evaluation)] = content
-            graph_evaluation.to_csv("results_py/graph_evaluation.csv", index=False)
-
+# TODO : uncomment later
+#for graph in graphs:
+#    path_true = f"results_py/true_graphs/{graph}.p"
+#    g_true = pickle.load(open(path_true, "rb"))
+#    d = len(g_true.nodes)
+#    n = d - 1
+#    target = "1"
+#    for size in sizes:
+#        for alg in algs:
+#            path_est = f"results_py/{alg}/graphs/{graph}_{size}_obs.p"
+#            g_est = pickle.load(open(path_est, "rb"))
+#            true_dseps = d_separation(g_true, target)
+#            est_dseps = d_separation(g_est, target)
+#            # now compare every entry
+#            tp = 0
+#            tn = 0
+#            fp = 0
+#            fn = 0
+#            for i in range(true_dseps.shape[0]):
+#                for j in range(true_dseps.shape[1]):
+#                    if true_dseps.iloc[i, j] == est_dseps.iloc[i, j]:
+#                        if true_dseps.iloc[i, j] is True:
+#                            tp += 1
+#                        else:
+#                            tn += 1
+#                    else:
+#                        if true_dseps.iloc[i, j] is True:
+#                            fn += 1
+#                        else:
+#                            fp += 1
+#            d_separated_total = tp + fn
+#            d_connected_total = tn + fp
+#            # share of dseps (just make a note, if d-separations were approximated via mc)
+#            dsep_share = d_separated_total / (d_separated_total + d_connected_total)
+#            if d_separated_total == 0:
+#                TP_rate = 0
+#                FN_rate = 0
+#            else:
+#                TP_rate = tp / d_separated_total
+#                FN_rate = fn / d_separated_total
+#            if d_connected_total == 0:
+#                TN_rate = 0
+#                FP_rate = 0
+#            else:
+#                TN_rate = tn / d_connected_total
+#                FP_rate = fp / d_connected_total
+#            # F1 score
+#            precision = tp / (tp + fp)
+#            recall = TP_rate
+#            F1 = (2 * precision * recall) / (precision + recall)
+#            content = [f"{graph}_{size}_obs", target, d, alg, "n/a", d_separated_total, d_connected_total,
+#                       dsep_share, tp, tn, fp, fn, TP_rate, TN_rate, FP_rate, FN_rate, precision, recall, F1]
+#            # fill evaluation table with current run
+#            graph_evaluation.loc[len(graph_evaluation)] = content
+#            graph_evaluation.to_csv("results_py/graph_evaluation.csv", index=False)
+#
 for graph in graphs_mc:
     path_true = f"results_py/true_graphs/{graph}.p"
     g_true = pickle.load(open(path_true, "rb"))
