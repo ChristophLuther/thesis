@@ -39,7 +39,7 @@ class PermutationEstimator:
                  batch_size=1,  # TODO batch_size back to 512
                  detect_convergence=False,
                  thresh=0.025,
-                 n_permutations=1000,
+                 n_permutations=100,
                  min_coalition=0.0,
                  max_coalition=1.0,
                  verbose=False,
