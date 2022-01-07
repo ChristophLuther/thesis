@@ -6,3 +6,5 @@ fitted_models/
 results_py/
 .DS_store
 visualization/
+sage_covert/results
+fit_models/
