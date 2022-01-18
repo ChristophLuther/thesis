@@ -1,8 +1,7 @@
 # Bayesian network structure learning using tabu algorithm (as implemented in bnlearn)
-# setwd("~/thesis_code")
+setwd("~/Desktop/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/tabu")
-dir.create("bnlearn/results/tabu/est_amat")
 
 #install.packages("bnlearn")
 library("bnlearn")
@@ -12,11 +11,11 @@ set.seed(1902)
 
 # to loop through different data sets
 graphs_discrete <- c("alarm", "asia", "hepar", "sachs")
-sample_sizes <- c(1000, 10000, 100000, 1000000, 2000000)
+sample_sizes <- c(10, 100, 1000, 10000, 20000)
 
 # initiate data frame to store metadata like runtime
 table <- data.frame(matrix(ncol = 4, nrow = 0))
-col_names <- c("Graph", "n sample size", "algorithm", "runtime in s")
+col_names <- c("Graph", "Sample Size", "Algorithm", "Runtime in s")
 colnames(table) <- col_names
 
 for (i in graphs_discrete){
@@ -41,7 +40,7 @@ for (i in graphs_discrete){
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/tabu/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
+    amat_file <- paste("bnlearn/results/tabu/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }

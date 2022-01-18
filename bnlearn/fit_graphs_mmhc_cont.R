@@ -2,7 +2,6 @@
 #setwd("~/Desktop/thesis_code")
 dir.create("bnlearn/results")
 dir.create("bnlearn/results/mmhc")
-dir.create("bnlearn/results/mmhc/est_amat")
 
 #install.packages("bnlearn")
 library("bnlearn")
@@ -11,12 +10,12 @@ library("bnlearn")
 set.seed(1902)
 
 # to loop through different data sets
-graphs_cont <- c("dag_s", "dag_m", "dag_l")
+graphs_cont <- c("dag_s", "dag_sm", "dag_m", "dag_l")
 sample_sizes <- c("1000", "10000", "100000", "1000000", "2000000")
 
 # initiate data frame to store metadata like runtime
 table <- data.frame(matrix(ncol = 4, nrow = 0))
-col_names <- c("Graph", "n sample size", "algorithm", "runtime in s")
+col_names <- c("Graph", "Sample Size", "Algorithm", "Runtime in s")
 colnames(table) <- col_names
 
 for (i in graphs_cont){
@@ -26,7 +25,7 @@ for (i in graphs_cont){
   
   for (sample_size in sample_sizes){
     
-    data_fit <- df[1:sample_size,]
+    data_fit <- df[sample(nrow(df), sample_size), ]
     
     # if conditions only necessary for the respective graphs (unused)
     if (i == "healthcare"){
@@ -57,7 +56,7 @@ for (i in graphs_cont){
     
     # adjacency matrix
     adj_mat <- amat(bn)
-    amat_file <- paste("bnlearn/results/mmhc/est_amat/", i, "_", sample_size, "_obs.csv", sep="")
+    amat_file <- paste("bnlearn/results/mmhc/", i, "_", sample_size, "_obs.csv", sep="")
     write.csv(adj_mat, file=amat_file, row.names = FALSE)
   }
 }
