@@ -6,6 +6,7 @@ import scipy.special as sp
 import numpy as np
 import os
 from scipy.stats import bernoulli
+import warnings
 
 
 def powerset(items):
@@ -26,17 +27,18 @@ def powerset(items):
 
 
 # function for all d separations wrt target:
-def d_separation(g, y, mc=None, random_state=None):
-    """Test d-separation of single node and y given every possible conditioning set in graph g
+def d_separation(g, y, g2=None, mc=None, random_state=None):
+    """Test d-separation of each single node and y given every possible conditioning set in graph g
 
     Args:
         g : nx.DiGraph
         y : target node with respect to which d-separation is tested
+        g2: potential second graph to be tested, that must contain the same nodes as g (typically an estimate of g)
         mc : if int given, mc sampling a subset of d-separations to be tested, recommended for large graphs
         random_state : seed for random and np.random when mc is not None
 
     Returns:
-         pandas dataframe of boolean values for d-separation for every node except y (if mc is None)
+         pandas dataframe of Boolean values for d-separation for every node except y (if mc is None)
          boolean array of d-separation, it cannot be traced back which d-separations were tested explicitly
          (if mc is not None)
     """
@@ -51,7 +53,11 @@ def d_separation(g, y, mc=None, random_state=None):
     # TODO remove everything that is 'too large'
     # number of possible d-separations between one feature and target, i.e. number of potential conditioning sets
     if mc is None:
+        # number of potential d-separations per node
         no_d_seps = (2 ** (n-1))
+        # warn user if number of d-separation tests is large
+        if no_d_seps > 1000000:
+            warnings.warn("Warning: No. of d-separation tests per node > 1M, can lead to large runtime")
         # initiate dataframe for all d-separations
         d_separations = pd.DataFrame(index=predictors, columns=range(no_d_seps))
 
@@ -62,13 +68,15 @@ def d_separation(g, y, mc=None, random_state=None):
             rng = np.random.default_rng(seed=random_state)
         else:
             rng = np.random.default_rng()
-        # initiate vector to store True/False for d-separations (cannot track conditioning sets)
+        # initiate vector to store True/False for d-separations (cannot track nodes and conditioning sets)
         d_seps_bool = []
+        if g2 is not None:
+            d_seps_bool_2 = []
         # get a vector of probabilities to draw the size of the conditioning set; note that for n-1 potential
         # deconfounders there are n different sizes of conditioning sets because of the empty set
         probs = []
-        for i in range(n):
-            probs.append((sp.comb(n-1, i)) / (2**(n-1)))
+        for jj in range(n):
+            probs.append((sp.comb(n-1, jj)) / (2**(n-1)))
         k = 0
         while k < mc:
             # draw index for feature of interest
@@ -86,6 +94,9 @@ def d_separation(g, y, mc=None, random_state=None):
                 # test d-separation with empty set as conditioning set
                 cond_set = set()
                 d_seps_bool.append(nx.d_separated(g, {node}, {y}, cond_set))
+                if g2 is not None:
+                    d_seps_bool_2.append(nx.d_separated(g2, {node}, {y}, cond_set))
+
             else:
                 # draw as many as 'card' numbers from range(n-1) as indices for conditioning set
                 indices = rng.choice(n-1, size=card, replace=False)
@@ -95,9 +106,17 @@ def d_separation(g, y, mc=None, random_state=None):
                     index = indices[ii]
                     cond_set.add(deconfounders[index])
                 d_seps_bool.append(nx.d_separated(g, {node}, {y}, cond_set))
+                if g2 is not None:
+                    d_seps_bool_2.append(nx.d_separated(g2, {node}, {y}, cond_set))
             k += 1
-        return d_seps_bool  # vector of booleans
+        if g2 is not None:
+            return d_seps_bool, d_seps_bool_2
+        else:
+            return d_seps_bool  # vector of booleans
     else:
+        if g2 is not None:
+            print("Note: g2 only for Monte Carlo inference, will not be regarded here")
+
         for i in range(n):
             # test d-separation w.r.t. target using all conditional sets possible
             # for current predictor at i-th position in predictors
@@ -123,7 +142,7 @@ def d_separation(g, y, mc=None, random_state=None):
                                 g, {node}, {y}, cond_set
                             )
                             j += 1
-        return d_separations    # df with d-separation bools for every predictor
+        return d_separations    # df with d-separation Booleans for every predictor
 
 
 # compute the number of d-separation statements from n
@@ -192,7 +211,7 @@ def create_folder(directory):
 
 
 def create_amat(n, p):
-    """Create a custom adjacency matrix of size n x n
+    """Create a random adjacency matrix of size n x n
 
     Args:
         n: number of nodes
@@ -214,3 +233,54 @@ def create_amat(n, p):
     for j in range(n):
         for k in range(n):
             amat.iloc[j, k] = bernoulli(p)
+
+
+def exact(g_true, g_est, y):
+    # the two dataframes of d-separations
+    true_dseps = d_separation(g_true, y)
+    est_dseps = d_separation(g_est, y)
+    # now compare every entry
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+    for i in range(true_dseps.shape[0]):
+        for j in range(true_dseps.shape[1]):
+            if true_dseps.iloc[i, j] == est_dseps.iloc[i, j]:
+                if true_dseps.iloc[i, j] is True:
+                    tp += 1
+                else:
+                    tn += 1
+            else:
+                if true_dseps.iloc[i, j] is True:
+                    fn += 1
+                else:
+                    fp += 1
+    # total number of d-separations in true graph
+    d_separated_total = tp + fn
+    d_connected_total = tn + fp
+    return tp, tn, fp, fn, d_separated_total, d_connected_total
+
+
+def approx(g_true, g_est, y, mc=None, rand_state=None):
+    true_dseps, est_dseps = d_separation(g_true, y, g2=g_est, mc=mc, random_state=rand_state)
+    # now compare every entry
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+    for i in range(len(true_dseps)):
+        if true_dseps[i] == est_dseps[i]:
+            if true_dseps[i] is True:
+                tp += 1
+            else:
+                tn += 1
+        else:
+            if true_dseps[i] is True:
+                fn += 1
+            else:
+                fp += 1
+    # total number of d-separation among tested nodes (make a node if d-separations were approximated via mc)
+    d_separated_total = tp + fn
+    d_connected_total = tn + fp
+    return tp, tn, fp, fn, d_separated_total, d_connected_total
