@@ -1,4 +1,4 @@
-"""Visualization of graph comparison"""
+"""Visualization of graph comparison (discrete graphs), f1 score"""
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
@@ -16,7 +16,7 @@ sys.path.insert(0, parent_dir)
 
 from functions import create_folder
 
-create_folder(".dseps/")
+create_folder("visualization/dseps/")
 
 df = pd.read_csv("results_py/graph_evaluation.csv")
 
@@ -54,8 +54,8 @@ fig, axes = plt.subplots(2, 2, figsize=(7, 4))
 fig.tight_layout(pad=2.1, h_pad=4)
 
 axes[0, 0].set_title(r'Asia')
-axes[0, 0].set_xlabel('Sample Size')
-axes[0, 0].set_ylabel('F1 Score')
+# axes[0, 0].set_xlabel('Sample Size')
+# axes[0, 0].set_ylabel('F1 Score')
 
 axes[0, 0].scatter(x, y1_asia, color='b', s=0.4)
 axes[0, 0].scatter(x, y2_asia, color='g', s=0.4)
@@ -67,8 +67,8 @@ l3 = axes[0, 0].plot(x, y3_asia, color='c', linestyle='--', markevery=mark, line
 l4 = axes[0, 0].plot(x, y4_asia, color='m', linestyle='-.', markevery=mark, linewidth=0.7)
 
 axes[0, 1].set_title(r'Sachs')
-axes[0, 1].set_xlabel('Sample Size')
-axes[0, 1].set_ylabel('F1 Score')
+# axes[0, 1].set_xlabel('Sample Size')
+# axes[0, 1].set_ylabel('F1 Score')
 
 axes[0, 1].scatter(x, y1_sachs, color='b', s=0.4)
 axes[0, 1].scatter(x, y2_sachs, color='g', s=0.4)
@@ -80,8 +80,8 @@ axes[0, 1].plot(x, y3_sachs, color='c', linestyle='--', markevery=mark, linewidt
 axes[0, 1].plot(x, y4_sachs, color='m', linestyle='-.', markevery=mark, linewidth=0.7)
 
 axes[1, 0].set_title(r'Alarm')
-axes[1, 0].set_xlabel('Sample Size')
-axes[1, 0].set_ylabel('F1 Score')
+# axes[1, 0].set_xlabel('Sample Size')
+# axes[1, 0].set_ylabel('F1 Score')
 
 axes[1, 0].scatter(x, y1_alarm, color='b', s=0.4)
 axes[1, 0].scatter(x, y2_alarm, color='g', s=0.4)
@@ -93,8 +93,8 @@ axes[1, 0].plot(x, y3_alarm, color='c', linestyle='--', markevery=mark, linewidt
 axes[1, 0].plot(x, y4_alarm, color='m', linestyle='-.', markevery=mark, linewidth=0.7)
 
 axes[1, 1].set_title(r'Hepar II')
-axes[1, 1].set_xlabel('Sample Size')
-axes[1, 1].set_ylabel('F1 Score')
+# axes[1, 1].set_xlabel('Sample Size')
+# axes[1, 1].set_ylabel('F1 Score')
 
 axes[1, 1].scatter(x, y1_hepar, color='b', s=0.4)
 axes[1, 1].scatter(x, y2_hepar, color='g', s=0.4)
@@ -106,13 +106,7 @@ axes[1, 1].plot(x, y3_hepar, color='c', linestyle='--', markevery=mark, linewidt
 axes[1, 1].plot(x, y4_hepar, color='m', linestyle='-.', markevery=mark, linewidth=0.7)
 
 line_labels = ["HC", "TABU", "MMHC", "H2PC"]
-#fig.legend([l1, l2, l3, l4],     # The line objects
-#           labels=line_labels,   # The labels for each line
-#           loc="upper center",   # Position of legend
-#           bbox_to_anchor=(0.83, 0.79),
-#           title="Algorithm",  # Title for the legend
-#           fancybox=True, shadow=True
-#           )
+
 
 fig.legend([l1, l2, l3, l4],     # The line objects
            labels=line_labels,   # The labels for each line
@@ -123,74 +117,8 @@ fig.legend([l1, l2, l3, l4],     # The line objects
            )
 plt.subplots_adjust(bottom=0.25)
 
-plt.savefig("visualization/dseps/discrete_dseps.png", dpi=400)
-plt.clf()
+fig.text(0.01, 0.6, 'F1 Score', va='center', rotation='vertical')
+fig.text(0.5, 0.15, 'Sample Size', ha='center')
 
-
-# plot number of inferred d-seps / number of true d-seps
-
-# now for cont
-
-y1 = df[df['method'] == "hc"]  # hc
-y2 = df[df['method'] == "tabu"]   # tabu
-
-y1_s = y1[y1['d'] == 10]["F1"]
-y2_s = y2[y2['d'] == 10]["F1"]
-
-y1_m = y1[y1['d'] == 50]["F1"]
-y2_m = y2[y2['d'] == 50]["F1"]
-
-y1_l = y1[y1['d'] == 100]["F1"]
-y2_l = y2[y2['d'] == 100]["F1"]
-
-fig, axes = plt.subplots(1, 3, figsize=(8, 3))
-# fig.suptitle(r"F1 Score of Estimated D-separations - Continuous Graphs", fontsize=12)
-fig.tight_layout(pad=2)
-
-axes[0].set_title(r'DAG$_{s}$')
-axes[0].set_xlabel('Sample Size')
-axes[0].set_ylabel('F1 Score')
-
-axes[0].scatter(x, y1_s, color='b', s=0.4)
-axes[0].scatter(x, y2_s, color='g', s=0.4)
-l1 = axes[0].plot(x, y1_s, color='b', linestyle='-', markevery=mark, linewidth=0.7)
-l2 = axes[0].plot(x, y2_s, color='g', linestyle=':', markevery=mark, linewidth=0.7)
-
-axes[1].set_title(r'DAG$_{m}$')
-axes[1].set_xlabel('Sample Size')
-axes[1].set_ylabel('F1 Score')
-
-axes[1].scatter(x, y1_m, color='b', s=0.4)
-axes[1].scatter(x, y2_m, color='g', s=0.4)
-axes[1].plot(x, y1_m, color='b', linestyle='-', markevery=mark, linewidth=0.7)
-axes[1].plot(x, y2_m, color='g', linestyle=':', markevery=mark, linewidth=0.7)
-
-axes[2].set_title(r'DAG$_{l}$')
-axes[2].set_xlabel('Sample Size')
-axes[2].set_ylabel('F1 Score')
-
-axes[2].scatter(x, y1_l, color='b', s=0.4)
-axes[2].scatter(x, y2_l, color='g', s=0.4)
-axes[2].plot(x, y1_l, color='b', linestyle='-', markevery=mark, linewidth=0.7)
-axes[2].plot(x, y2_l, color='g', linestyle=':', markevery=mark, linewidth=0.7)
-
-line_labels = [r"HC", r"TABU"]
-#fig.legend([l1, l2],     # The line objects
-#           labels=line_labels,   # The labels for each line
-#           loc="upper center",   # Position of legend
-#           bbox_to_anchor=(0.875, 0.33),
-#           title="Algorithm",  # Title for the legend
-#           fancybox=True, shadow=True
-#           )
-
-fig.legend([l1, l2],     # The line objects
-           labels=line_labels,   # The labels for each line
-           loc="lower center",   # Position of legend
-           bbox_to_anchor=(0.5, 0.0),
-           title="Algorithm",  # Title for the legend
-           fancybox=True, shadow=True, ncol=2, fontsize=8
-           )
-plt.subplots_adjust(bottom=0.29)
-
-plt.savefig("visualization/dseps/cont_dseps.png", dpi=400)
+plt.savefig("visualization/dseps/discrete_dseps.png", dpi=400, transparent=True)
 plt.clf()
